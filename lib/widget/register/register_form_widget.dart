@@ -59,7 +59,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => const HomePage()));
+                  builder: (BuildContext context) =>  HomePage()));
         }
 
       } on FirebaseAuthException catch (e) {
