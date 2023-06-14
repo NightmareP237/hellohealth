@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hellohealth/SplashScreen/Sp1.dart';
 import 'package:hellohealth/screens/loading-page.dart';
+import 'package:hellohealth/widget/home/bottom-bar.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -51,7 +52,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) =>  HomePage()));
+                  builder: (BuildContext context) =>  BottomBar()));
         }
       } on FirebaseAuthException catch (e) {
         // On error
@@ -184,7 +185,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                           decoration: InputDecoration(
                             fillColor: Colors.orange,
                             prefixIcon: Icon(Icons.email),
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(style: BorderStyle.solid)
+                            ),
                             labelText: 'Enter your email address :',
                             contentPadding:
                                 EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
@@ -296,6 +299,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                           ),
                         Center(
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 'You do not have an account ?',
@@ -333,6 +337,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                             ],
                           ),
                         ),
+                        SizedBox(height: 12,),
                         GestureDetector(
                           onTap: () {
                             _makingPhoneCall();

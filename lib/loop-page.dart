@@ -15,7 +15,7 @@ class LoopPage extends StatefulWidget {
 class _LoopPageState extends State<LoopPage> {
   @override
   Widget build(BuildContext context) {
-    return LoopPageView.builder(
+    return PageView.builder(
         itemCount: 3,
         itemBuilder: (_, index) {
           return index == 0

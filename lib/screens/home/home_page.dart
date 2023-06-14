@@ -548,7 +548,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       TextSpan(
-                        text: "Specialist",
+                        text: "Doctor",
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.black87,
