@@ -268,10 +268,12 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:hellohealth/screens/home/search-doctor.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../ressources/const.dart';
+import 'package:ionicons/ionicons.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -445,513 +447,601 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ));
+    Future<void> getdata() async {}
 
+    double doublewidth = MediaQuery.of(context).size.width;
+    double doubleheight = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 16,
-                  ),
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.grey.shade400,
-                    // backgroundImage: AssetImage("assets/user.png"),
-                    child: Center(
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.black87,
-                      ),
+      body: RefreshIndicator(
+        displacement: 50,
+        color: primaryMain,
+        onRefresh: () {
+          return getdata();
+        },
+        child: SafeArea(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 16),
+                //         Padding(
+                //           padding:
+                //               const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                //           child: Column(
+                //             mainAxisAlignment: MainAxisAlignment.start,
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             children: [
+                //               const Text(
+                //                 "Welcome, you are a health staff then register !",
+                //                 style: TextStyle(
+                //                     color: Colors.black,
+                //                     fontSize: 16,
+                //                     fontWeight: FontWeight.bold,
+                //                     fontStyle: FontStyle.italic),
+                //               ),
+                //               SizedBox(
+                //                 height: 8,
+                //               ),
+                //               Row(
+                //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //                 children: [
+                //                   GestureDetector(
+                //                     onTap: () {
+                //                       // _trySubmit();
+                //                     },
+                //                     child: Container(
+                //                       width: doublewidth / 2.25,
+                //                       height: 40,
+                //                       padding: EdgeInsets.all(10),
+                //                       decoration: BoxDecoration(
+                //                         borderRadius: BorderRadius.circular(5),
+                //                         color: Colors.green.withOpacity(.7),
+                //                       ),
+                //                       child: Center(
+                //                         child: Text(
+                //                           "Sign In",
+                //                           style: TextStyle(
+                //                               fontWeight: FontWeight.w600,
+                //                               color: Colors.white,
+                //                               fontSize: 16),
+                //                         ),
+                //                       ),
+                //                     ),
+                //                   ),
+                //                   GestureDetector(
+                //                     onTap: () {
+                //                       // _trySubmit();
+                //                     },
+                //                     child: Container(
+                //                       width: doublewidth / 2.25,
+                //                       height: 40,
+                //                       padding: EdgeInsets.all(10),
+                //                       decoration: BoxDecoration(
+                //                         borderRadius: BorderRadius.circular(5),
+                //                         color: Colors.orange.withOpacity(.7),
+                //                       ),
+                //                       child: Center(
+                //                         child: Text(
+                //                           "Sign Up",
+                //                           style: TextStyle(
+                //                               fontWeight: FontWeight.w600,
+                //                               color: Colors.white,
+                //                               fontSize: 16),
+                //                         ),
+                //                       ),
+                //                     ),
+                //                   ),
+                //                 ],
+                //               )
+                //             ],
+                //           ),
+                //         ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 16,
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "Welcome ,",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        "Ainna Petula",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  // iconWidget(FontAwesomeIcons.bagShopping, true),
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.grey.shade400,
-                    // backgroundImage: AssetImage("assets/user.png"),
-                    child: Center(
-                      child: Icon(
-                        Icons.search,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.grey.shade400,
-                    // backgroundImage: AssetImage("assets/user.png"),
-                    child: Center(
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.grey.shade400,
+                      // backgroundImage: AssetImage("assets/user.png"),
+                      child: const Center(
                         child: Icon(
-                      Icons.message,
-                      color: Colors.black87,
-                    )),
-                  ),
-                  SizedBox(
-                    width: 12,
-                  )
-                ],
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 240,
-                child: PageView.builder(
-                  controller: controller,
-                  // itemCount: pages.length,
-                  itemBuilder: (_, index) {
-                    return pages[index % pages.length];
-                  },
+                          Ionicons.person,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "Welcome ,",
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          "Ainna Petula",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    // iconWidget(FontAwesomeIcons.bagShopping, true),
+                    GestureDetector(
+                      onTap: () => nav(SearchDoctor(), context),
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Colors.grey.shade400,
+                        // backgroundImage: AssetImage("assets/user.png"),
+                        child: const Center(
+                          child: Icon(
+                            Ionicons.search,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.grey.shade400,
+                      // backgroundImage: AssetImage("assets/user.png"),
+                      child: const Center(
+                          child: Icon(
+                        Ionicons.notifications,
+                        color: Colors.black87,
+                      )),
+                    ),
+                    const SizedBox(
+                      width: 12,
+                    )
+                  ],
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 24, bottom: 12),
-                child: RichText(
-                  text: const TextSpan(
+                const SizedBox(height: 16),
+
+                SizedBox(
+                  height: 240,
+                  child: PageView.builder(
+                    controller: controller,
+                    // itemCount: pages.length,
+                    itemBuilder: (_, index) {
+                      return pages[index % pages.length];
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 24, bottom: 12),
+                  child: RichText(
+                    text: const TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Find Your ",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "Doctor",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        // TextSpan(
+                        //   text: "Hay Markets",
+                        //   style: TextStyle(
+                        //     fontSize: 35,
+                        //     color: Colors.black87,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        // )
+                      ],
+                    ),
+                  ),
+                ),
+                SmoothPageIndicator(
+                  controller: controller,
+                  count: pages.length,
+                  effect: WormEffect(
+                    dotHeight: 16,
+                    dotWidth: 16,
+                    dotColor: Colors.grey.shade400,
+                    activeDotColor: primaryMain,
+                    type: WormType.thinUnderground,
+                  ),
+                ),
+                //
+                Padding(
+                  padding: const EdgeInsets.only(top: 16, bottom: 8, left: 16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      TextSpan(
-                        text: "Find Your ",
+                      Text(
+                        'Categories',
                         style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w400,
-                        ),
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15),
                       ),
-                      TextSpan(
-                        text: "Doctor",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      // TextSpan(
-                      //   text: "Hay Markets",
-                      //   style: TextStyle(
-                      //     fontSize: 35,
-                      //     color: Colors.black87,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // )
                     ],
                   ),
                 ),
-              ),
-              SmoothPageIndicator(
-                controller: controller,
-                count: pages.length,
-                effect: WormEffect(
-                  dotHeight: 16,
-                  dotWidth: 16,
-                  dotColor: Colors.grey.shade400,
-                  activeDotColor: primaryMain,
-                  type: WormType.thinUnderground,
-                ),
-              ),
-              //
-              Padding(
-                padding: const EdgeInsets.only(top: 16, bottom: 8, left: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Categories',
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15),
-                    ),
-                  ],
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(children: [
-                  for (int i = 0; i <= 1; i++)
-                    Container(
-                      height: 100,
-                      width: 120,
-                      margin: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: primaryMain.withOpacity(.1),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Lottie.asset(
-                            i == 0
-                                ? 'assets/lotties/Psychiatry.json'
-                                : 'assets/lotties/Cardiology.json',
-                            height: 70,
-                            width: 70,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            i == 0 ? 'Psychiatrist' : 'Cardiologist',
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14),
-                          )
-                        ],
-                      ),
-                    ),
-                  for (int i = 0; i <= 1; i++)
-                    Container(
-                      height: 100,
-                      width: 120,
-                      margin: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: primaryMain.withOpacity(.1),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Image.asset(
-                            i == 0
-                                ? 'assets/lotties/neurology.png'
-                                : 'assets/lotties/pharmacy.png',
-                            height: 70,
-                            width: 70,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            i == 0 ? 'Neurosurge' : 'Mediatrician',
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14),
-                          )
-                        ],
-                      ),
-                    ),
-
-                    
-                ]),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 16, bottom: 8, left: 16, right: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Available Doctor',
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15),
-                    ),
-                    Text(
-                      'Online',
-                      style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15),
-                    ),
-                  ],
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: mapdata
-                      .getRange(4, 9)
-                      .map((e) => Container(
-                            // height: 300,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              color: primaryMain.withOpacity(.5),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  child: Row(children: [
+                    for (int i = 0; i <= 1; i++)
+                      Container(
+                        height: 100,
+                        width: 120,
+                        margin: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: primaryMain.withOpacity(.1),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 5,
                             ),
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 4),
-                            child: Container(
-                              height: 280,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(12.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(height: 5),
-                                          Text(
-                                            e['name'].toString(),
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Text(
-                                            "Experience",
-                                            style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          Text(
-                                            e['experience'].toString(),
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          SizedBox(height: 10),
-                                          Text(
-                                            "This Specialist is Online ...",
-                                            style: TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w800,
-                                            ),
-                                          ),
-                                          SizedBox(height: 10),
-                                          Text(
-                                            "Message and Call are Open !",
-                                            style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          SizedBox(height: 10),
-                                          Container(
-                                            width: 200,
-                                            height: 40,
-                                            padding: EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color:
-                                                  Colors.green.withOpacity(.7),
-                                            ),
-                                            child: Center(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Icon(
-                                                    Icons.message,
-                                                    color: Colors.white,
-                                                  ),
-                                                  Text(
-                                                    "messages",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.white,
-                                                        fontSize: 16),
-                                                  ),
-                                                ],
+                            Lottie.asset(
+                              i == 0
+                                  ? 'assets/lotties/Psychiatry.json'
+                                  : 'assets/lotties/Cardiology.json',
+                              height: 70,
+                              width: 70,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              i == 0 ? 'Psychiatrist' : 'Cardiologist',
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14),
+                            )
+                          ],
+                        ),
+                      ),
+                    for (int i = 0; i <= 1; i++)
+                      Container(
+                        height: 100,
+                        width: 120,
+                        margin: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: primaryMain.withOpacity(.1),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Image.asset(
+                              i == 0
+                                  ? 'assets/lotties/neurology.png'
+                                  : 'assets/lotties/pharmacy.png',
+                              height: 70,
+                              width: 70,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              i == 0 ? 'Neurosurge' : 'Mediatrician',
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14),
+                            )
+                          ],
+                        ),
+                      ),
+                  ]),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 16, bottom: 8, left: 16, right: 16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Available Doctor',
+                        style: TextStyle(
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15),
+                      ),
+                      Text(
+                        'Online',
+                        style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  child: Row(
+                    children: mapdata
+                        .getRange(4, 9)
+                        .map((e) => Container(
+                              // height: 300,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: primaryMain.withOpacity(.5),
+                              ),
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 4),
+                              child: Container(
+                                height: 280,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(12.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(height: 5),
+                                            Text(
+                                              e['name'].toString(),
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w700,
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(height: 10),
-                                          // Text(
-                                          //   "Call",
-                                          //   style: TextStyle(
-                                          //     color: Colors.black,
-                                          //     fontSize: 16,
-                                          //     fontWeight: FontWeight.w700,
-                                          //   ),
-                                          // ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            children: [
-                                              SizedBox(
-                                                width: 25,
+                                            SizedBox(height: 5),
+                                            Text(
+                                              "Experience",
+                                              style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
                                               ),
-                                              CircleAvatar(
-                                                radius: 30,
-                                                backgroundColor:
-                                                    Colors.red.shade500,
-                                                // backgroundImage: AssetImage("assets/user.png"),
-                                                child: Center(
-                                                  child: Icon(
-                                                    size: 30,
-                                                    Icons.call_end_outlined,
-                                                    color: Colors.white,
-                                                  ),
+                                            ),
+                                            Text(
+                                              e['experience'].toString(),
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                              "This Specialist is Online ...",
+                                              style: TextStyle(
+                                                color: Colors.green,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w800,
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                              "Message and Call are Open !",
+                                              style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            Container(
+                                              width: 200,
+                                              height: 40,
+                                              padding: EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.green
+                                                    .withOpacity(.7),
+                                              ),
+                                              child: Center(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Icon(
+                                                      Ionicons
+                                                          .chatbox_ellipses_outline,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      "messages",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.white,
+                                                          fontSize: 16),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                              SizedBox(
-                                                width: 20,
-                                              ),
-                                              CircleAvatar(
-                                                radius: 30,
-                                                backgroundColor:
-                                                    Colors.red.shade500,
-                                                // backgroundImage: AssetImage("assets/user.png"),
-                                                child: Center(
-                                                  child: Icon(
-                                                    Icons.video_call_outlined,
-                                                    color: Colors.white,
-                                                    size: 30,
+                                            ),
+                                            SizedBox(height: 10),
+                                            // Text(
+                                            //   "Call",
+                                            //   style: TextStyle(
+                                            //     color: Colors.black,
+                                            //     fontSize: 16,
+                                            //     fontWeight: FontWeight.w700,
+                                            //   ),
+                                            // ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              children: [
+                                                SizedBox(
+                                                  width: 25,
+                                                ),
+                                                CircleAvatar(
+                                                  radius: 30,
+                                                  backgroundColor:
+                                                      Colors.red.shade500,
+                                                  // backgroundImage: AssetImage("assets/user.png"),
+                                                  child: Center(
+                                                    child: Icon(
+                                                      size: 30,
+                                                      Ionicons.call_outline,
+                                                      color: Colors.white,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          )
-                                        ],
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                CircleAvatar(
+                                                  radius: 30,
+                                                  backgroundColor:
+                                                      Colors.red.shade500,
+                                                  // backgroundImage: AssetImage("assets/user.png"),
+                                                  child: Center(
+                                                    child: Icon(
+                                                      Ionicons.videocam_outline,
+                                                      color: Colors.white,
+                                                      size: 30,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Container(
-                                    height: double.infinity,
-                                    width: 150,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: Image.asset(
-                                      e['image'].toString(),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                ],
+                                    Container(
+                                      height: double.infinity,
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: Image.asset(
+                                        e['image'].toString(),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ))
-                      .toList(),
-                ),
-              )
+                            ))
+                        .toList(),
+                  ),
+                )
 
-              // Container(
-              //   child: SmoothPageIndicator(
-              //     controller: controller,
-              //     count: pages.length,
-              //     effect: JumpingDotEffect(
-              //       dotHeight: 16,
-              //       dotWidth: 16,
-              //       jumpScale: .7,
-              //       verticalOffset: 15,
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(top: 16, bottom: 12),
-              //   child: Text(
-              //     'Scrolling Dots',
-              //     style: TextStyle(color: Colors.black54),
-              //   ),
-              // ),
-              // SmoothPageIndicator(
-              //     controller: controller,
-              //     count: pages.length,
-              //     effect: ScrollingDotsEffect(
-              //       activeStrokeWidth: 2.6,
-              //       activeDotScale: 1.3,
-              //       maxVisibleDots: 5,
-              //       radius: 8,
-              //       spacing: 10,
-              //       dotHeight: 12,
-              //       dotWidth: 12,
-              //     )),
-              // Padding(
-              //   padding: const EdgeInsets.only(top: 16, bottom: 16),
-              //   child: Text(
-              //     'Customizable Effect',
-              //     style: TextStyle(color: Colors.black54),
-              //   ),
-              // ),
-              // Container(
-              //   // color: Colors.red.withOpacity(.4),
-              //   child: SmoothPageIndicator(
-              //     controller: controller,
-              //     count: pages.length,
-              //     effect: CustomizableEffect(
-              //       activeDotDecoration: DotDecoration(
-              //         width: 32,
-              //         height: 12,
-              //         color: Colors.indigo,
-              //         rotationAngle: 180,
-              //         verticalOffset: -10,
-              //         borderRadius: BorderRadius.circular(24),
-              //         // dotBorder: DotBorder(
-              //         //   padding: 2,
-              //         //   width: 2,
-              //         //   color: Colors.indigo,
-              //         // ),
-              //       ),
-              //       dotDecoration: DotDecoration(
-              //         width: 24,
-              //         height: 12,
-              //         color: Colors.grey,
-              //         // dotBorder: DotBorder(
-              //         //   padding: 2,
-              //         //   width: 2,
-              //         //   color: Colors.grey,
-              //         // ),
-              //         // borderRadius: BorderRadius.only(
-              //         //     topLeft: Radius.circular(2),
-              //         //     topRight: Radius.circular(16),
-              //         //     bottomLeft: Radius.circular(16),
-              //         //     bottomRight: Radius.circular(2)),
-              //         borderRadius: BorderRadius.circular(16),
-              //         verticalOffset: 0,
-              //       ),
-              //       spacing: 6.0,
-              //       // activeColorOverride: (i) => colors[i],
-              //       inActiveColorOverride: (i) => colors[i],
-              //     ),
-              //   ),
-              // ),
-              // const SizedBox(height: 32.0),
-            ],
+                // Container(
+                //   child: SmoothPageIndicator(
+                //     controller: controller,
+                //     count: pages.length,
+                //     effect: JumpingDotEffect(
+                //       dotHeight: 16,
+                //       dotWidth: 16,
+                //       jumpScale: .7,
+                //       verticalOffset: 15,
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 16, bottom: 12),
+                //   child: Text(
+                //     'Scrolling Dots',
+                //     style: TextStyle(color: Colors.black54),
+                //   ),
+                // ),
+                // SmoothPageIndicator(
+                //     controller: controller,
+                //     count: pages.length,
+                //     effect: ScrollingDotsEffect(
+                //       activeStrokeWidth: 2.6,
+                //       activeDotScale: 1.3,
+                //       maxVisibleDots: 5,
+                //       radius: 8,
+                //       spacing: 10,
+                //       dotHeight: 12,
+                //       dotWidth: 12,
+                //     )),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 16, bottom: 16),
+                //   child: Text(
+                //     'Customizable Effect',
+                //     style: TextStyle(color: Colors.black54),
+                //   ),
+                // ),
+                // Container(
+                //   // color: Colors.red.withOpacity(.4),
+                //   child: SmoothPageIndicator(
+                //     controller: controller,
+                //     count: pages.length,
+                //     effect: CustomizableEffect(
+                //       activeDotDecoration: DotDecoration(
+                //         width: 32,
+                //         height: 12,
+                //         color: Colors.indigo,
+                //         rotationAngle: 180,
+                //         verticalOffset: -10,
+                //         borderRadius: BorderRadius.circular(24),
+                //         // dotBorder: DotBorder(
+                //         //   padding: 2,
+                //         //   width: 2,
+                //         //   color: Colors.indigo,
+                //         // ),
+                //       ),
+                //       dotDecoration: DotDecoration(
+                //         width: 24,
+                //         height: 12,
+                //         color: Colors.grey,
+                //         // dotBorder: DotBorder(
+                //         //   padding: 2,
+                //         //   width: 2,
+                //         //   color: Colors.grey,
+                //         // ),
+                //         // borderRadius: BorderRadius.only(
+                //         //     topLeft: Radius.circular(2),
+                //         //     topRight: Radius.circular(16),
+                //         //     bottomLeft: Radius.circular(16),
+                //         //     bottomRight: Radius.circular(2)),
+                //         borderRadius: BorderRadius.circular(16),
+                //         verticalOffset: 0,
+                //       ),
+                //       spacing: 6.0,
+                //       // activeColorOverride: (i) => colors[i],
+                //       inActiveColorOverride: (i) => colors[i],
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(height: 32.0),
+              ],
+            ),
           ),
         ),
       ),
@@ -959,7 +1049,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-final colors = const [
+final colors = [
   Colors.red,
   Colors.green,
   Colors.greenAccent,

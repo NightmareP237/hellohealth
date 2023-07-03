@@ -41,6 +41,7 @@ dependencies:
   cloud_firestore: ^4.7.1
   intl: ^0.18.1
   firebase_auth: ^4.6.1
+  ionicons: ^0.2.2
   smooth_page_indicator: ^1.1.0
   simple_animations: ^4.2.0
   shared_preferences: ^2.1.1

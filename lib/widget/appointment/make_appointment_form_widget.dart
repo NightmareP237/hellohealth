@@ -109,7 +109,7 @@ class _MakeAppointmentFormWidgetState extends State<MakeAppointmentFormWidget> {
                   ),
               readOnly: true,
               onTap: () async {
-                var today = new DateTime.now();
+                var today =  DateTime.now();
                 var fiftyDaysFromNow = today.add(new Duration(days: 3));
                 DateTime? pickedDate = await showDatePicker(
                   context: context,
@@ -157,7 +157,6 @@ class _MakeAppointmentFormWidgetState extends State<MakeAppointmentFormWidget> {
                   await createAppointment(appointment);
 
                 }
-
                 if (widget.mode == 'edit') {
                   await updateAppointment(appointment);
                 }

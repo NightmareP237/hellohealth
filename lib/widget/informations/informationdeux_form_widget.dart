@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:hellohealth/widget/home/bottom-bar.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../Animations/FadeAnimation.dart';
@@ -31,13 +32,13 @@ class _InformationDeuxFormWidgetState extends State<InformationDeuxFormWidget>
     // the splash screen is displayed.  Remove the following example because
     // delaying the user experience is a bad design practice!
     // ignore_for_file: avoid_print
-    print('ready in 3...');
-    await Future.delayed(const Duration(seconds: 1));
-    print('ready in 2...');
-    await Future.delayed(const Duration(seconds: 1));
-    print('ready in 1...');
-    await Future.delayed(const Duration(seconds: 1));
-    print('go!');
+    // print('ready in 3...');
+    // await Future.delayed(const Duration(seconds: 1));
+    // print('ready in 2...');
+    // await Future.delayed(const Duration(seconds: 1));
+    // print('ready in 1...');
+    // await Future.delayed(const Duration(seconds: 1));
+    // print('go!');
     FlutterNativeSplash.remove();
   }
 
@@ -90,7 +91,7 @@ class _InformationDeuxFormWidgetState extends State<InformationDeuxFormWidget>
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
               Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
+                    MaterialPageRoute(builder: (context) => BottomBar()));
             }
           });
   }

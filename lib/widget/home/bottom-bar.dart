@@ -3,7 +3,9 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hellohealth/screens/doctors/HomeScreen.dart';
 import 'package:hellohealth/screens/home/home_page.dart';
+import 'package:ionicons/ionicons.dart';
 
 import '../../ressources/const.dart';
 import '../../screens/home/doctor-page.dart';
@@ -18,15 +20,17 @@ class BottomBarState extends State<BottomBar> {
   var currentIndex = 0;
   List<Widget> listofPages = [
     HomePage(),
-    HomeScreen(),
+    Home_Screen(),
     Scaffold(
       appBar: AppBar(
         title: Text("Effets Academiques", style: TextStyle(color: primaryMain)),
         backgroundColor: Colors.white,
       ),
-      body: Builder(
-      builder: (BuildContext context) {
-        return Center(child: Text('Welcome'),);}),
+      body: Builder(builder: (BuildContext context) {
+        return Center(
+          child: Text('Welcome'),
+        );
+      }),
     ),
     ProfileScreen()
   ];
@@ -132,7 +136,7 @@ class BottomBarState extends State<BottomBar> {
                               ),
                               Icon(
                                 listOfIcons[index],
-                                size: displayWidth * .076,
+                                size: displayWidth * .067,
                                 color: index == currentIndex
                                     ? primaryMain
                                     : Colors.black26,
@@ -153,10 +157,10 @@ class BottomBarState extends State<BottomBar> {
   }
 
   List<IconData> listOfIcons = [
-    Icons.home_rounded,
-    Icons.people_rounded,
-    Icons.share_arrival_time_rounded,
-    Icons.person_rounded,
+    Ionicons.home,
+    Icons.medical_services_rounded,
+    Ionicons.list,
+    Ionicons.person,
   ];
 
   List<String> listOfStrings = [

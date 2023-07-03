@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hellohealth/SplashScreen/Sp1.dart';
 import 'package:hellohealth/SplashScreen/essai.dart';
@@ -12,9 +13,17 @@ class LoopPage extends StatefulWidget {
   State<LoopPage> createState() => _LoopPageState();
 }
 
+
 class _LoopPageState extends State<LoopPage> {
   @override
+  void initState() {
+    FirebaseAuth.instance.signInAnonymously();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // ignore: unnecessary_null_comparison
     return PageView.builder(
         itemCount: 3,
         itemBuilder: (_, index) {

@@ -35,6 +35,6 @@ class _StatutState extends State<Statut> {
   }
 
   Widget build(BuildContext context) {
-    return user != null ? BottomBar() : LoopPage();
+    return user != null ? BottomBar() : const LoopPage();
   }
 }
