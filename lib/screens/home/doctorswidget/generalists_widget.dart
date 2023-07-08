@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../models/CardItem.dart';
+import '../../../models/CardItem.dart';
 import '../carditem/cardItemWidget.dart';
 
 class GeneralistsWidget extends StatefulWidget {
@@ -76,17 +76,17 @@ class _GeneralistsWidgetState extends State<GeneralistsWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: 250,
-        child: ListView.separated(
-          padding: EdgeInsets.all(16),
-          scrollDirection: Axis.horizontal,
-          itemCount: items.length,
-          separatorBuilder: (context, _) => SizedBox(width: 12,),
-          itemBuilder: (context, index) => CardItemWidget( item: items[index] ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Wrap(
+            spacing: 16,
+            runAlignment: WrapAlignment.spaceBetween,
+            runSpacing: 16,
+            children: List.generate(items.length, (index) => CardItemWidget(item: items[index])),
+          ),
         ),
-      ),
+      )
     );
   }
-
 }

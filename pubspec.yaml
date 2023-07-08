@@ -47,11 +47,13 @@ dependencies:
   shared_preferences: ^2.1.1
   image_picker: ^0.8.7+5
   flutter_native_splash: ^2.2.8
+  roundcheckbox: ^2.0.5
   path_provider: ^2.0.15
   animated_theme_switcher: ^2.0.8
   email_validator: ^2.1.17
   firebase_core: ^2.13.0
   url_launcher: ^6.1.11
+  skeletons: ^0.0.3
   firebase_crashlytics: ^3.3.1
   loop_page_view: ^1.2.2
   lottie: ^2.3.2

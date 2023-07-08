@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:hellohealth/ressources/const.dart';
+import 'package:hellohealth/screens/home/search-result-page.dart';
 import 'package:intl/intl.dart';
 
 class SearchDoctor extends StatefulWidget {
@@ -24,30 +25,35 @@ class _SearchDoctorState extends State<SearchDoctor> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
                   Text(
                     "Search Your ,",
                     style: TextStyle(
                       color: Colors.black87,
-                      fontSize: 16,
+                      fontSize: 20,
                       fontWeight: FontWeight.w300,
                     ),
                   ),
                   SizedBox(height: 5),
                   Text(
-                    "Specialist",
+                    "Doctor",
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ],
               ),
-              const Spacer(),
+              const SizedBox(
+                height: 16,
+              ),
               TextFormField(
                 cursorColor: Colors.orange,
                 key: ValueKey('area'),
@@ -68,6 +74,9 @@ class _SearchDoctorState extends State<SearchDoctor> {
                 onSaved: (val) {
                   // _userPassword = val!;
                 },
+              ),
+              const SizedBox(
+                height: 16,
               ),
               TextFormField(
                 cursorColor: Colors.orange,
@@ -98,28 +107,32 @@ class _SearchDoctorState extends State<SearchDoctor> {
               //       : null,
               //   autofocus: false,
               //   obscureText: true,
-               
+
               //   onSaved: (val) {
               //     // _userPassword = val!;
               //   },
               // ),
+              const SizedBox(
+                height: 16,
+              ),
               TextField(
                 controller: dateInput,
                 //editing controller of this TextField
                 decoration: const InputDecoration(
                   iconColor: Colors.orange,
-                  prefixIcon: Icon(Icons.lock),
+                  prefixIcon: Icon(
+                    Icons.calendar_today,
+                  ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.orange),
                   ),
                   labelText: 'Select date',
-                  contentPadding:
-                      EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
-                    icon: Icon(
-                      Icons.calendar_today,
-                      color: Colors.orange,
-                    ),
-                    ),
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
+                  // icon: Icon(
+                  //   Icons.calendar_today,
+                  //   color: Colors.orange,
+                  // ),
+                ),
                 readOnly: true,
                 onTap: () async {
                   var today = DateTime.now();
@@ -146,14 +159,17 @@ class _SearchDoctorState extends State<SearchDoctor> {
                   } else {}
                 },
               ),
-              const Spacer(),
+              const SizedBox(
+                height: 16,
+              ),
+
               GestureDetector(
                 onTap: () {
-                  // _trySubmit();
+                  nav(ResultPage(selectArea: 'Douala',), context);
                 },
                 child: Container(
-                  width: 340,
-                  height: 40,
+                  width: double.infinity,
+                  height: 50,
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),

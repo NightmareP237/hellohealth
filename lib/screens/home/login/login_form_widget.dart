@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hellohealth/SplashScreen/Sp1.dart';
-import 'package:hellohealth/screens/loading-page.dart';
-import 'package:hellohealth/widget/home/bottom-bar.dart';
+import 'package:hellohealth/screens/home/SplashScreen/Sp1.dart';
+import 'package:hellohealth/screens/home/loading-page.dart';
+import 'package:hellohealth/screens/home/bottom-bar.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../models/auth_provider.dart';
-import '../../screens/auth/register/forgotpasspage.dart';
-import '../../screens/auth/register/register_page.dart';
-import '../../screens/home/home_page.dart';
+import '../../../models/auth_provider.dart';
+import '../../auth/register/forgotpasspage.dart';
+import '../../auth/register/register_page.dart';
+import '../home_page.dart';
 
 class LoginFormWidget extends StatefulWidget {
   const LoginFormWidget({Key? key}) : super(key: key);

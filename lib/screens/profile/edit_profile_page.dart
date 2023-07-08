@@ -18,7 +18,9 @@ import '../../widget/profile/textfield_widget.dart';
 class EditProfilePage extends StatefulWidget {
   final model.User authUser;
 
-  const EditProfilePage({Key? key, required this.authUser}) : super(key: key);
+  const EditProfilePage({Key? key, 
+   required this.authUser
+  }) : super(key: key);
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -32,7 +34,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     _nameController.text = widget.authUser.name ?? '';
-    _emailController.text = widget.authUser.email;
+    _emailController.text = widget.authUser.email.isEmpty?'NguepinsiFrank@gmail.com':'';
     super.initState();
   }
 
@@ -83,10 +85,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
             final model.User user = model.User(
-                id: authStateProvider.authUser!.id,
+                id: authStateProvider.authUser!.id.isEmpty?'kksjjdjjdjd':authStateProvider.authUser!.id,
                 email: _emailController.text,
                 name: _nameController.text,
-                password: authStateProvider.authUser?.password);
+                password: authStateProvider.authUser?.password??'hjhjhjhjhh');
             await authStateProvider.updateUser(user);
             if (!mounted) return;
             Navigator.pushReplacement(
@@ -119,7 +121,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 physics: BouncingScrollPhysics(),
                 children: [
                   ProfileFormWidget(
-                    imagePath: authStateProvider.authUser!.imagePath ?? '',
+                    imagePath: authStateProvider.authUser!.imagePath ?? 'assets/images/d7.jpeg',
                     isEdit: true,
                     onClicked: () async {
                       final image = await ImagePicker()

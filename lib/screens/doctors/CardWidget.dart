@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hellohealth/SplashScreen/Sp1.dart';
+import 'package:hellohealth/screens/home/SplashScreen/Sp1.dart';
 import 'package:hellohealth/ressources/const.dart';
 import 'dart:math' as math;
 

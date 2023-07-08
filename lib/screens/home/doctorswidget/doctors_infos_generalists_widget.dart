@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../models/CardItem.dart';
-import '../../screens/appointment/make_appointment_page.dart';
+import '../../../models/CardItem.dart';
+import '../../appointment/make_appointment_page.dart';
 
 class DoctorsInfosGeneralistsWidget extends StatefulWidget {
   final CardItem item;

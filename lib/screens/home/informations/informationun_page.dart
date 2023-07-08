@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../widget/informations/informationun_form_widget.dart';
+import 'informationun_form_widget.dart';
 
 class InformationUnPage extends StatefulWidget {
   const InformationUnPage({Key? key}) : super(key: key);

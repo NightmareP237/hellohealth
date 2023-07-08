@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:hellohealth/widget/login/login_form_widget.dart';
+import 'package:hellohealth/screens/home/login/login_form_widget.dart';
 
 class LoginPage extends StatefulWidget {
   static String routeName = 'loginPage';
@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: LoginFormWidget(),
     );
   }

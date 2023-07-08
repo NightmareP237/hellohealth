@@ -51,14 +51,14 @@ class _AppointmentWidgetState extends State<AppointmentWidget> {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        child: Text('${widget.appointment!.age}'),
+        child: Text('{widget.appointment!.age}'),
       ),
       title: Text(
         widget.appointment!.patientname,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
       ),
       subtitle: Text(
-          ' AppointmentDate : ${widget.appointment!.date}    Symptom: ${widget.appointment!.symptom}'),
+          ' AppointmentDate : {widget.appointment!.date}    Symptom: ${widget.appointment!.symptom}'),
       trailing: Wrap(
         spacing: 5, // space between two icons
         children: [
@@ -80,7 +80,7 @@ class _AppointmentWidgetState extends State<AppointmentWidget> {
                           child: Text('Cancel')),
                       TextButton(
                           onPressed: () {
-                            deleteAppointment(widget.appointment!);
+                            // deleteAppointment(widget.appointment!);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

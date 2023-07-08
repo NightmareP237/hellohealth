@@ -2,16 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:hellohealth/SplashScreen/Sp1.dart';
+import 'package:hellohealth/screens/home/SplashScreen/Sp1.dart';
 import 'package:hellohealth/screens/home/home_page.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:hellohealth/screens/statut.dart';
+import 'package:hellohealth/screens/home/statut.dart';
 import 'package:provider/provider.dart';
-import 'SplashScreen/essai.dart';
+import 'screens/home/SplashScreen/essai.dart';
 import 'loop-page.dart';
 import 'models/auth_provider.dart';
 import 'models/userpreference.dart';
-import 'screens/auth/login/login_page.dart';
+import 'screens/home/login/login_page.dart';
 
 main() async {
   // These two lines

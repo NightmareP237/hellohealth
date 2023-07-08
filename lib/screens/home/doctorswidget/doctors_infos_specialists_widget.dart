@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/CardItem.dart';
+import '../../../models/CardItem.dart';
 
 class DoctorsInfosSpecialistsWidget extends StatefulWidget {
   final CardItem item;

@@ -25,21 +25,23 @@ class _ProfilePageState extends State<ProfilePage> {
         physics: BouncingScrollPhysics(),
         children: [
           ProfileFormWidget(
-              imagePath: authStateProvider.authUser?.imagePath ?? '',
+              imagePath: authStateProvider.authUser?.imagePath ?? 'assets/images/d3.png',
               onClicked: () async {
               await  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => EditProfilePage(authUser: authStateProvider.authUser!,))
+                    MaterialPageRoute(builder: (context) => EditProfilePage(
+                      authUser: authStateProvider.authUser!,
+                      ))
               );
               setState(() {});
               },),
           SizedBox(
             height: 24,
           ),
-          buildName( authStateProvider.authUser!),
+          // buildName( authStateProvider.authUser!),
           SizedBox(
             height: 24,
           ),
-          Center(child: buildUpgradeButton()),
+          // Center(child: buildUpgradeButton()),
           SizedBox(
             height: 24,
           ),
@@ -47,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(
             height: 30,
           ),
-          buildAbout( authStateProvider.authUser!),
+          // buildAbout( authStateProvider.authUser!),
         ],
       ),
     );

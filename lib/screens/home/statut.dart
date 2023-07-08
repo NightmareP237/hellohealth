@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hellohealth/widget/home/bottom-bar.dart';
+import 'package:hellohealth/screens/home/bottom-bar.dart';
 
-import '../loop-page.dart';
-import 'auth.dart';
-import 'home/home_page.dart';
+import '../../loop-page.dart';
+import '../auth.dart';
+import 'home_page.dart';
 
 class Statut extends StatefulWidget {
   Statut({Key? key}) : super(key: key);

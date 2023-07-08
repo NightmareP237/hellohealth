@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/auth_provider.dart';
-import '../../screens/auth/login/login_page.dart';
+import '../../screens/home/login/login_page.dart';
 import '../../screens/home/home_page.dart';
 
 class RegisterFormWidget extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hellohealth/screens/auth/login/login_page.dart';
+import 'package:hellohealth/screens/home/login/login_page.dart';
 //import 'package:hellohealth/login/login_page.dart';
 import 'package:page_transition/page_transition.dart';
 

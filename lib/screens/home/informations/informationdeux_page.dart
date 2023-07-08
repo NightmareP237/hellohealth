@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../widget/informations/informationdeux_form_widget.dart';
+import 'informationdeux_form_widget.dart';
+
 
 class InformationDeuxPage extends StatefulWidget {
   const InformationDeuxPage({Key? key}) : super(key: key);

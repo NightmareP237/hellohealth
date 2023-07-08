@@ -5,8 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../Animations/FadeAnimation.dart';
-import '../screens/informations/informationun_page.dart';
+import '../../../Animations/FadeAnimation.dart';
 
 class stack extends StatefulWidget {
   @override

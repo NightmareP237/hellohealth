@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:hellohealth/widget/home/bottom-bar.dart';
+import 'package:hellohealth/screens/home/bottom-bar.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../Animations/FadeAnimation.dart';
-import '../../screens/auth/login/login_page.dart';
+import '../../../Animations/FadeAnimation.dart';
+import '../login/login_page.dart';
 
 class InformationDeuxFormWidget extends StatefulWidget {
   const InformationDeuxFormWidget({Key? key}) : super(key: key);
