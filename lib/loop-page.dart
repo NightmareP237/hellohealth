@@ -16,12 +16,6 @@ class LoopPage extends StatefulWidget {
 
 class _LoopPageState extends State<LoopPage> {
   @override
-  void initState() {
-    FirebaseAuth.instance.signInAnonymously();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     // ignore: unnecessary_null_comparison
     return PageView.builder(

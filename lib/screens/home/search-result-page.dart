@@ -124,7 +124,7 @@ class _ResultPageState extends State<ResultPage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    nav(DoctorView(doctorDetail: mapdata[index]), context);
+                    // nav(DoctorView(doctorDetail: mapdata[index]), context);
                   },
                   child: Container(
                     padding: EdgeInsets.all(10),

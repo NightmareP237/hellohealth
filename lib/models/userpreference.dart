@@ -8,14 +8,16 @@ class UserPreference {
   static late SharedPreferences _preferences;
   static const _keyUser = 'user';
 
-  static  model.User myUser = model.User(
+  static model.User myUser = model.User(
+    createdAt: '',
+    role: 'patient',
     id: '',
-      imagePath: '',
-      name: 'aina petula',
-      email: 'ainapetula@gmail.com',
-      about: 'dev mobile et web',
-      password: '',
-      isDarkMode: false,
+    imagePath: '',
+    name: 'aina petula',
+    phone: 'ainapetula@gmail.com',
+    about: 'dev mobile et web',
+    password: '',
+    isDarkMode: false,
   );
 
   static Future init() async =>
@@ -30,6 +32,6 @@ class UserPreference {
   static Object getUser() {
     final json = _preferences.getString(_keyUser);
 
-    return json == null ? myUser: model.User.fromJson(jsonDecode(json));
+    return json == null ? myUser : model.User.fromJson(jsonDecode(json));
   }
 }

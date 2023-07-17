@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:hellohealth/screens/home/SplashScreen/Sp1.dart';
 import 'package:hellohealth/screens/home/loading-page.dart';
 import 'package:hellohealth/screens/home/bottom-bar.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,7 +32,7 @@ _makingPhoneCall() async {
 class _LoginFormWidgetState extends State<LoginFormWidget> {
   final _formkey = GlobalKey<FormState>();
   bool _isLoading = false;
-  var _userEmail = '';
+  var _userPhone = '';
   var _userPassword = '';
 
   void _trySubmit() async {
@@ -46,7 +47,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         });
         final AuthProvider authStateProvider =
             Provider.of<AuthProvider>(context, listen: false);
-        await authStateProvider.login(_userEmail.trim(), _userPassword.trim());
+        await authStateProvider.login(_userPhone.trim(), _userPassword.trim());
         if (!mounted) return;
         if (authStateProvider.isAuthenticated == true) {
           Navigator.pushReplacement(
@@ -170,30 +171,31 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                         ),
                         TextFormField(
                           cursorColor: Colors.orange,
-                          key: ValueKey('email'),
+                          key: ValueKey('phone'),
                           validator: (value) {
-                            if (value!.isEmpty ||
-                                (!value.contains('@') &&
-                                    !value.contains('.'))) {
-                              return 'Enter a valid email address !';
+                            if (value!.isEmpty||(value.length<10)
+                                // (!value.contains('@') &&
+                                //     !value.contains('.'))
+                                    ) {
+                              return 'Enter a valid phone number !';
                             }
                             return null;
                           },
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.phone,
                           autofocus: false,
                           textCapitalization: TextCapitalization.none,
                           decoration: InputDecoration(
                             fillColor: Colors.orange,
-                            prefixIcon: Icon(Icons.email),
+                            prefixIcon: Icon(Ionicons.phone_landscape),
                             border: OutlineInputBorder(
                               borderSide: BorderSide(style: BorderStyle.solid)
                             ),
-                            labelText: 'Enter your email address :',
+                            labelText: 'Enter your phone number',
                             contentPadding:
                                 EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
                           ),
                           onSaved: (val) {
-                            _userEmail = val!;
+                            _userPassword = val!;
                           },
                         ),
                         // if (!_isLogin)
@@ -210,7 +212,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                           obscureText: true,
                           decoration: InputDecoration(
                             iconColor: Colors.orange,
-                            prefixIcon: Icon(Icons.lock),
+                            prefixIcon: Icon(Ionicons.lock_closed),
                             border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.orange),
                             ),

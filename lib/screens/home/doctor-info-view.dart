@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:hellohealth/models/patient.dart';
+import 'package:hellohealth/models/Appointment.dart';
+import 'package:hellohealth/models/doctor.dart';
 import 'package:hellohealth/ressources/const.dart';
+import 'package:hellohealth/screens/home/SplashScreen/Sp1.dart';
 import 'package:hellohealth/screens/home/home_page.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -8,7 +12,8 @@ import 'Appointment.dart';
 
 class DoctorView extends StatefulWidget {
   DoctorView({super.key, required this.doctorDetail});
-  Map<String, String> doctorDetail;
+  // Map<String, String> doctorDetail;
+  Doctor doctorDetail;
   // final imageDoctor;
   @override
   State<DoctorView> createState() => _DoctorViewState();
@@ -38,7 +43,7 @@ class _DoctorViewState extends State<DoctorView> {
                             ? Ionicons.call
                             : (index == 2)
                                 ? Ionicons.videocam
-                                : Icons.message,
+                                : Ionicons.logo_whatsapp,
                         color: Colors.white,
                       ),
                       Text(
@@ -58,7 +63,7 @@ class _DoctorViewState extends State<DoctorView> {
               ),
             ));
     return Scaffold(
-      appBar: appbar(context, widget.doctorDetail['name']),
+      // appBar: appbar(context, ),
       body: SafeArea(
           child: SingleChildScrollView(
         child: Container(
@@ -69,13 +74,64 @@ class _DoctorViewState extends State<DoctorView> {
               Container(
                 height: redimh(context) / 2.5,
                 width: double.infinity,
-                child: Image.asset(
-                  width: 600,
-                  height: 400,
-                  widget.doctorDetail['image'].toString(),
-                  filterQuality: FilterQuality.high,
-                  fit: BoxFit.cover,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10))),
+                child: Stack(
+                  children: [
+                    Image.network(
+                      width: 600,
+                      height: 400,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.white,
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                        ));
+                      },
+                      widget.doctorDetail.image.toString(),
+                      filterQuality: FilterQuality.high,
+                      fit: BoxFit.cover,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(.7),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Center(
+                            child: Icon(
+                              Icons.arrow_back_ios_new_rounded,
+                              color: primaryMain,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(widget.doctorDetail.name.toString(), style: NameStyle()),
+                ],
               ),
               Padding(
                 padding: EdgeInsets.all(16),
@@ -91,7 +147,7 @@ class _DoctorViewState extends State<DoctorView> {
                       height: 20,
                     ),
                     Text(
-                      "Medecine & ${widget.doctorDetail['specialist'].toString()} Specialist",
+                      "Medecine & ${widget.doctorDetail.experience.toString()} Specialist",
                       style: SubTitle(),
                     ),
                     Text(
@@ -111,16 +167,16 @@ class _DoctorViewState extends State<DoctorView> {
                       height: 20,
                     ),
                     Text(
-                      "About ${widget.doctorDetail['name'].toString().split('Dr')[1]}",
+                      "About ${widget.doctorDetail.name.toString().split('Dr')[1]}",
                       style: SubTitle(),
                     ),
                     SizedBox(
                       height: 8,
                     ),
                     Text(
-                      widget.doctorDetail['description'].toString().isEmpty
+                      widget.doctorDetail.description.toString().isEmpty
                           ? "Lorem ipsum isk sdm ,.sdmm wjfkjkdmnd ,sdmjkjds klskdjdfhhkasjdajs asjdkasjdjasd jnddjnse lBDLdf bdsdjfba asdjfa slJDSDU  slajbsdf sJBF"
-                          : widget.doctorDetail['description'].toString(),
+                          : widget.doctorDetail.description.toString(),
                       textAlign: TextAlign.start,
                       style: body(),
                     ),
@@ -142,19 +198,17 @@ class _DoctorViewState extends State<DoctorView> {
                                           ? "Patients"
                                           : index == 1
                                               ? "Specialist"
-                                              : 'Years',
+                                              : 'Experience',
                                       style: body(),
                                     ),
                                     Text(
                                       index == 0
-                                          ? widget.doctorDetail['patients']
+                                          ? widget.doctorDetail.patients
                                               .toString()
                                           : index == 1
-                                              ? widget
-                                                  .doctorDetail['specialist']
+                                              ? widget.doctorDetail.specialist
                                                   .toString()
-                                              : widget
-                                                  .doctorDetail['experience']
+                                              : widget.doctorDetail.experience
                                                   .toString(),
                                       style: NameStyle(),
                                     ),
@@ -174,7 +228,7 @@ class _DoctorViewState extends State<DoctorView> {
                         height: 50,
                         decoration: BoxDecoration(
                             color: primaryMain,
-                            borderRadius: BorderRadius.circular(10)),
+                            borderRadius: BorderRadius.circular(5)),
                         child: Center(
                           child: Text(
                             "Book An Appointment",

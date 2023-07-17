@@ -192,8 +192,8 @@ class _DoctorsInfosGeneralistsWidgetState
                         ),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const MakeAppointmentPage()));
+                            // Navigator.of(context).push(MaterialPageRoute(
+                            //     builder: (context) => const MakeAppointmentPage()));
                           },
                           child: const Center(child: const Text('Make an Appointment')),
                         ),

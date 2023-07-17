@@ -85,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
             height: 4,
           ),
           Text(
-            user.email,
+            user.phone,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
         ],

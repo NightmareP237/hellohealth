@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 // import 'package:models/user.dart' as model;
 import 'package:hellohealth/models/user.dart' as model;
 
-
 class Response {
   int? code;
   String? message;
-
   Response({this.code, this.message});
 }
 
@@ -26,22 +24,21 @@ class AuthProvider with ChangeNotifier {
   /*set authUser(  model.User? value) {
   _authUser  = value as model.User?;
   }*/
-
   FirebaseAuth authInstance = FirebaseAuth.instance;
 
   // Our Function will take email,password, username and buildcontext
-  Future<void> register(String email, String password, String name) async {
-    print("enter new user-----------------.$email $name $password");
+  Future<void> register(String phone, String password, String name) async {
+    print("enter new user-----------------.$phone $name $password");
     // Get back usercredential future from createUserWithEmailAndPassword method
     UserCredential userCred = await authInstance.createUserWithEmailAndPassword(
-      email: email,
+      email:"$phone@gmail.com",
       password: password,
     );
     // Save username name
     await userCred.user!.updateDisplayName(name);
     await userCred.user!.sendEmailVerification();
 
-    await login(email, password);
+    await login(phone, password);
     await createUser(_authUser!);
     // notify listeneres
     notifyListeners();
@@ -55,7 +52,6 @@ class AuthProvider with ChangeNotifier {
     print(json);
     print('-----------------------------------------------------------');
     await docUser.set(json!);
-
     notifyListeners();
   }
 
@@ -78,10 +74,15 @@ class AuthProvider with ChangeNotifier {
       print(response.message);
     } else {
       _authUser = model.User(
+        password: user.password,
+        role: user.role,
+        isDarkMode: user.isDarkMode ?? false,
+        createdAt: user.createdAt,
+        updatedAt: DateTime.now().toString(),
         id: user.id,
         imagePath: user.imagePath ?? '',
         name: user.name,
-        email: user.email,
+        phone: user.phone,
         about: user.about ?? '',
       );
 
@@ -90,22 +91,21 @@ class AuthProvider with ChangeNotifier {
   }
 
   // Our Function will take email, password and build context
-
-  Future<void> login(String email, String password) async {
+  Future<void> login(String phone, String password) async {
     UserCredential userCred = await authInstance.signInWithEmailAndPassword(
-        email: email, password: password);
-
+        email: "$phone@gmail.com", password: password);
     if (userCred.user != null) {
       _authUser = model.User(
+        createdAt: DateTime.now().toString(),
+        role: 'patient',
         id: userCred.user!.uid,
         imagePath: userCred.user?.photoURL,
         name: userCred.user?.displayName,
-        //
-        email: userCred.user!.email!,
+        updatedAt: '',
+        phone: userCred.user!.email!,
         password: password,
       );
     }
-
     // notify the listeners.
     notifyListeners();
   }

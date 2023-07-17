@@ -91,7 +91,7 @@ class _InformationDeuxFormWidgetState extends State<InformationDeuxFormWidget>
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
               Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => BottomBar()));
+                    MaterialPageRoute(builder: (context) => LoginPage()));
             }
           });
   }

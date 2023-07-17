@@ -12,31 +12,32 @@ import 'package:ionicons/ionicons.dart';
 import '../../ressources/const.dart';
 import 'doctor-page.dart';
 import 'loading-home-page.dart';
-import 'planning.dart';
+import 'planning-appointments.dart';
 import 'profile-screen.dart';
 import '../profile/profile_page.dart';
 
 class BottomBar extends StatefulWidget {
+  BottomBar({this.indexNavPage = 0});
+  var indexNavPage;
   @override
   BottomBarState createState() => BottomBarState();
 }
 
 class BottomBarState extends State<BottomBar> {
   var currentIndex = 0;
-  
+
   @override
- 
   Widget build(BuildContext context) {
-     
     List<Widget> listofPages = [
-    HomePage(),
-    Home_Screen(),
-    Planning(),
-    ProfilePage()
-  ];
+      HomePage(),
+      Home_Screen(),
+      Planning(),
+      MoreScreen()
+    ];
     double displayWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: listofPages[currentIndex],
+      body: listofPages[
+          widget.indexNavPage == 0 ? currentIndex : widget.indexNavPage],
       bottomNavigationBar: Container(
         margin: EdgeInsets.all(displayWidth * .05),
         height: displayWidth * .155,
@@ -100,9 +101,8 @@ class BottomBarState extends State<BottomBar> {
                           AnimatedContainer(
                             duration: Duration(seconds: 1),
                             curve: Curves.fastLinearToSlowEaseIn,
-                            width: index == currentIndex
-                                ? displayWidth * .13
-                                : 0,
+                            width:
+                                index == currentIndex ? displayWidth * .13 : 0,
                           ),
                           AnimatedOpacity(
                             opacity: index == currentIndex ? 1 : 0,
@@ -126,9 +126,8 @@ class BottomBarState extends State<BottomBar> {
                           AnimatedContainer(
                             duration: Duration(seconds: 1),
                             curve: Curves.fastLinearToSlowEaseIn,
-                            width: index == currentIndex
-                                ? displayWidth * .03
-                                : 20,
+                            width:
+                                index == currentIndex ? displayWidth * .03 : 20,
                           ),
                           Icon(
                             listOfIcons[index],
@@ -161,6 +160,6 @@ class BottomBarState extends State<BottomBar> {
     'Home',
     'Doctors',
     'Planning',
-    'Profil',
+    'Account',
   ];
 }

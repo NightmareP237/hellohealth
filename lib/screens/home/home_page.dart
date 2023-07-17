@@ -269,9 +269,17 @@
 // }
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hellohealth/models/doctor.dart';
 import 'package:hellohealth/screens/home/search-doctor.dart';
+import 'package:hellohealth/screens/home/video-call.dart';
+import 'package:hellohealth/screens/home/voice-call-doctor.dart';
 import 'package:lottie/lottie.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../ressources/const.dart';
@@ -292,133 +300,64 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Timer(
-        const Duration(seconds: 5),
-        () => setState(() {
-              isloading = false;
-              print('hello');
-            }));
+    getDoctor();
+  }
+
+  List<Doctor> mapdata = [];
+  Future<bool> getDoctor() async {
+    try {
+      setState(() {
+        isloading = true;
+      });
+      await FirebaseFirestore.instance
+          .collection('doctors')
+          .limit(10)
+          .get(GetOptions(source: Source.server))
+          .then((value) async {
+        mapdata = Doctor.fromQuerySnapshot(value);
+        print(mapdata.length);
+        setState(() {
+          isloading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.green[400],
+              content: const Text('Page is update !')));
+        });
+        return false;
+      });
+    } catch (e) {
+      setState(() {
+        isloading = true;
+      });
+      print(e);
+      setState(() {
+        isloading = false;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red[400],
+            content: const Text('Network Connection !')));
+      });
+      return true;
+    }
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final mapdata = [
-      {
-        "name": "Dr Ethan Ebode",
-        "experience": "7 Years",
-        "patients": "3.4 k",
-        "description":"",
-        'specialist': "Generalist",
-        "image": "assets/images/d3.png"
-      },
-      {
-        "name": "Dr Julio Francis ",
-        "experience": "4 Years",
-        "patients": "8.4 k",
-        'specialist': "Dentist",
-        "image": "assets/images/d5.png",
-         "description":
-          'Specialist dentist, he is known for his humor with patients,'
-              ' young and passionate about his profession to take care of'
-              ' our teeth and always keep them clean',
-      },
-      {
-        "name": "Dr Debora Yvana",
-        "experience": "8 Years",
-        'specialist': "Generalist",
-        "description":"",
-        "patients": "4.4 k",
-        "image": "assets/images/d6.jpeg"
-      },
-      {
-        "name": "Dr Veronica Cantana",
-        "experience": "5 Years",
-        'specialist': "Veterinary",
-         "description": 'ensure the health and well-being of all animal species and contribute '
-          'to the improvement of public health, in particular with regard to diseases '
-          'transmissible from animals to humans.',
-        "patients": "6.4 k",
-        "image": "assets/images/d7.jpeg"
-      },
-      {
-        "name": "Dr Verclaire Simon",
-        "experience": "6 Years",
-        "patients": "8.4 k",
-       'specialist': "Ophtamologist",
-         "description": 'The queen of sight because she has dedicated her whole life '
-          'to helping her patients by improving their vision',
-        "image": "assets/images/d8.jpeg"
-      },
-      {
-        "name": "Dr Juliette Estrella",
-        'specialist': "Veterinary",
-         "description": 'ensure the health and well-being of all animal species and contribute '
-          'to the improvement of public health, in particular with regard to diseases '
-          'transmissible from animals to humans.',
-        "experience": "6 Years",
-        "patients": "5.4 k",
-        "image": "assets/images/d9.jpeg"
-      },
-      {
-        "name": "Dr Jovanie Esther",
-        'specialist': "Dermatologist",
-         "description": 'is the expert in the diagnosis and treatment of skin pathologies'
-          ' and general diseases affecting the skin',
-        "experience": "4 Years",
-        "patients": "7.4 k",
-        "image": "assets/images/d10.jpeg"
-      },
-      {
-        "name": "Dr Valerie Epie",
-        'specialist': "Generalist",
-        "description":"",
-        "experience": "3 Years",
-        "patients": "6.4 k",
-        "image": "assets/images/d11.png"
-      },
-      {
-        "name": "Dr Josiane Makuche",
-        "experience": "6 Years",
-        'specialist': "Rheumatologist",
-        "patients": "5.4 k",
-         "description": 'Specialist in diseases of the bones, joints, muscles and tendons.'
-          ' It therefore treats and prevents pain in the neck, back, and all the joints'
-          ' of the skeleton.',
-        "image": "assets/images/d12.jpeg"
-      },
-      {
-        "name": "Dr Dieudonne Eliote",
-        'specialist': "Ophtamologist",
-         "description": 'The queen of sight because she has dedicated her whole life '
-          'to helping her patients by improving their vision',
-        "experience": "5 Years",
-        "patients": "7.4 k",
-        "image": "assets/images/d13.png"
-      },
-      {
-        "name": "Dr Estrella Ivonne",
-        'specialist': "Surgeon",
-        "experience": "5 Years",
-        "patients": "3.4 k",
-         "description": 'He started in his profession when he was still 27 years old. '
-          'Very dedicated, he does not consider the risks during an operation'
-          ' because he handled his tools well.',
-        "image": "assets/images/d14.jpeg"
-      },
-    ];
-
     final pages = List.generate(
-        10,
+        mapdata.length,
         (index) => GestureDetector(
               onTap: () {
-                nav(DoctorView(doctorDetail: mapdata[index]), context);
+                (mapdata[index].image.isEmpty)
+                    ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Colors.red[300],
+                        content: const Text('Please wait loading image...')))
+                    : nav(DoctorView(doctorDetail: mapdata[index]), context);
               },
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   color: primaryMain.withOpacity(.5),
                 ),
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 child: Container(
                   height: 280,
                   child: Row(
@@ -430,17 +369,17 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Text(
-                                  mapdata[index]['name'].toString(),
-                                  style: TextStyle(
+                                  mapdata[index].name.toString(),
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                SizedBox(height: 5),
-                                Text(
+                                const SizedBox(height: 5),
+                                const Text(
                                   "Medecine Specialist",
                                   style: TextStyle(
                                     color: Colors.black87,
@@ -448,8 +387,8 @@ class _HomePageState extends State<HomePage> {
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                                SizedBox(height: 10),
-                                Text(
+                                const SizedBox(height: 10),
+                                const Text(
                                   "Experience",
                                   style: TextStyle(
                                     color: Colors.black54,
@@ -457,17 +396,17 @@ class _HomePageState extends State<HomePage> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Text(
-                                  mapdata[index]['experience'].toString(),
-                                  style: TextStyle(
+                                  mapdata[index].experience.toString(),
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                SizedBox(height: 10),
-                                Text(
+                                const SizedBox(height: 10),
+                                const Text(
                                   "Patients",
                                   style: TextStyle(
                                     color: Colors.black54,
@@ -475,10 +414,10 @@ class _HomePageState extends State<HomePage> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Text(
-                                  mapdata[index]['patients'].toString(),
-                                  style: TextStyle(
+                                  mapdata[index].patients.toString(),
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
                                     fontWeight: FontWeight.w700,
@@ -495,8 +434,20 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Image.asset(
-                          mapdata[index]['image'].toString(),
+                        child: Image.network(
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                                child: CircularProgressIndicator(
+                              color: Colors.white,
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ));
+                          },
+                          mapdata[index].image,
                           fit: BoxFit.cover,
                         ),
                       )
@@ -505,29 +456,17 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ));
-    Future<void> getdata() async {
-      setState(() {
-        isloading = true;
-      });
-      Timer(
-          const Duration(seconds: 5),
-          () => setState(() {
-                isloading = false;
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  backgroundColor: Colors.green[400],
-                  content: const Text('Page is update !')));
-              }));
-    }
+
     double doublewidth = MediaQuery.of(context).size.width;
     double doubleheight = MediaQuery.of(context).size.height;
-    return isloading
+    return (isloading && mapdata.isEmpty)
         ? const Homeloading()
         : Scaffold(
             body: RefreshIndicator(
               displacement: 50,
               color: primaryMain,
               onRefresh: () {
-                return getdata();
+                return getDoctor();
               },
               child: SafeArea(
                 child: SingleChildScrollView(
@@ -535,7 +474,7 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       //         Padding(
                       //           padding:
                       //               const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
@@ -610,7 +549,7 @@ class _HomePageState extends State<HomePage> {
                       //         ),
                       Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           CircleAvatar(
@@ -627,8 +566,8 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 "Welcome ,",
                                 style: TextStyle(
                                   color: Colors.black87,
@@ -636,10 +575,11 @@ class _HomePageState extends State<HomePage> {
                                   fontWeight: FontWeight.w300,
                                 ),
                               ),
-                              SizedBox(height: 5),
+                              const SizedBox(height: 5),
                               Text(
-                                "Ainna Petula",
-                                style: TextStyle(
+                                FirebaseAuth.instance.currentUser!.displayName
+                                    .toString(),
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -651,7 +591,7 @@ class _HomePageState extends State<HomePage> {
                           // iconWidget(FontAwesomeIcons.bagShopping, true),
                           GestureDetector(
                             onTap: () {
-                              nav(SearchDoctor(), context);
+                              nav(const SearchDoctor(), context);
                             },
                             child: CircleAvatar(
                               radius: 20,
@@ -665,7 +605,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           CircleAvatar(
@@ -747,7 +687,7 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Categories',
                               style: TextStyle(
                                   color: Colors.black54,
@@ -763,11 +703,11 @@ class _HomePageState extends State<HomePage> {
                         child: Row(children: [
                           for (int i = 0; i <= 1; i++)
                             GestureDetector(
-                              onTap: (){},
+                              onTap: () {},
                               child: Container(
                                 height: 100,
                                 width: 120,
-                                margin: EdgeInsets.all(10),
+                                margin: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   color: primaryMain.withOpacity(.1),
                                   borderRadius: BorderRadius.circular(5),
@@ -776,7 +716,7 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Lottie.asset(
@@ -786,12 +726,12 @@ class _HomePageState extends State<HomePage> {
                                       height: 70,
                                       width: 70,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Text(
                                       i == 0 ? 'Psychiatrist' : 'Cardiologist',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black54,
                                           fontWeight: FontWeight.w600,
                                           fontSize: 14),
@@ -804,7 +744,7 @@ class _HomePageState extends State<HomePage> {
                             Container(
                               height: 100,
                               width: 120,
-                              margin: EdgeInsets.all(10),
+                              margin: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 color: primaryMain.withOpacity(.1),
                                 borderRadius: BorderRadius.circular(5),
@@ -813,7 +753,7 @@ class _HomePageState extends State<HomePage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   Image.asset(
@@ -823,12 +763,12 @@ class _HomePageState extends State<HomePage> {
                                     height: 70,
                                     width: 70,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   Text(
                                     i == 0 ? 'Neurosurge' : 'Mediatrician',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.black54,
                                         fontWeight: FontWeight.w600,
                                         fontSize: 14),
@@ -845,14 +785,14 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'Available Doctor',
                               style: TextStyle(
                                   color: Colors.black54,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 15),
                             ),
-                            Text(
+                            const Text(
                               'Online',
                               style: TextStyle(
                                   color: Colors.green,
@@ -874,7 +814,7 @@ class _HomePageState extends State<HomePage> {
                                       borderRadius: BorderRadius.circular(16),
                                       color: primaryMain.withOpacity(.5),
                                     ),
-                                    margin: EdgeInsets.symmetric(
+                                    margin: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 4),
                                     child: Container(
                                       height: 280,
@@ -882,23 +822,24 @@ class _HomePageState extends State<HomePage> {
                                         children: [
                                           Container(
                                             child: Padding(
-                                              padding: EdgeInsets.all(12.0),
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  SizedBox(height: 5),
+                                                  const SizedBox(height: 5),
                                                   Text(
-                                                    e['name'].toString(),
-                                                    style: TextStyle(
+                                                    e.name.toString(),
+                                                    style: const TextStyle(
                                                       color: Colors.black,
                                                       fontSize: 20,
                                                       fontWeight:
                                                           FontWeight.w700,
                                                     ),
                                                   ),
-                                                  SizedBox(height: 5),
-                                                 const Text(
+                                                  const SizedBox(height: 5),
+                                                  const Text(
                                                     "Experience",
                                                     style: TextStyle(
                                                       color: Colors.black54,
@@ -908,16 +849,16 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    e['experience'].toString(),
-                                                    style: TextStyle(
+                                                    e.experience.toString(),
+                                                    style: const TextStyle(
                                                       color: Colors.black,
                                                       fontSize: 20,
                                                       fontWeight:
                                                           FontWeight.w700,
                                                     ),
                                                   ),
-                                                  SizedBox(height: 10),
-                                                const  Text(
+                                                  const SizedBox(height: 10),
+                                                  const Text(
                                                     "This Doctor is Online ...",
                                                     style: TextStyle(
                                                       color: Colors.green,
@@ -926,8 +867,8 @@ class _HomePageState extends State<HomePage> {
                                                           FontWeight.w800,
                                                     ),
                                                   ),
-                                                  SizedBox(height: 10),
-                                                  Text(
+                                                  const SizedBox(height: 10),
+                                                  const Text(
                                                     "Message and Call are Open !",
                                                     style: TextStyle(
                                                       color: Colors.black54,
@@ -936,11 +877,14 @@ class _HomePageState extends State<HomePage> {
                                                           FontWeight.w500,
                                                     ),
                                                   ),
-                                                  SizedBox(height: 10),
+                                                  const SizedBox(height: 10),
                                                   Container(
                                                     width: 200,
                                                     height: 40,
-                                                    padding: EdgeInsets.all(10),
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        vertical: 8,
+                                                        horizontal: 16),
                                                     decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.circular(
@@ -954,9 +898,9 @@ class _HomePageState extends State<HomePage> {
                                                             MainAxisAlignment
                                                                 .spaceEvenly,
                                                         children: [
-                                                          Icon(
+                                                          const Icon(
                                                             Ionicons
-                                                                .chatbox_ellipses_outline,
+                                                                .logo_whatsapp,
                                                             color: Colors.white,
                                                           ),
                                                           Text(
@@ -973,7 +917,7 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                     ),
                                                   ),
-                                                  SizedBox(height: 10),
+                                                  const SizedBox(height: 10),
                                                   // Text(
                                                   //   "Call",
                                                   //   style: TextStyle(
@@ -988,37 +932,53 @@ class _HomePageState extends State<HomePage> {
                                                             .spaceAround,
                                                     // crossAxisAlignment: CrossAxisAlignment.stretch,
                                                     children: [
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         width: 25,
                                                       ),
-                                                      CircleAvatar(
-                                                        radius: 30,
-                                                        backgroundColor:
-                                                            Colors.red.shade500,
-                                                        // backgroundImage: AssetImage("assets/user.png"),
-                                                        child: Center(
-                                                          child: Icon(
-                                                            size: 30,
-                                                            Ionicons
-                                                                .call_outline,
-                                                            color: Colors.white,
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          nav(const VoiceCall(),
+                                                              context);
+                                                        },
+                                                        child: CircleAvatar(
+                                                          radius: 30,
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .red.shade500,
+                                                          // backgroundImage: AssetImage("assets/user.png"),
+                                                          child: const Center(
+                                                            child: Icon(
+                                                              size: 30,
+                                                              Ionicons
+                                                                  .call_outline,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         width: 20,
                                                       ),
-                                                      CircleAvatar(
-                                                        radius: 30,
-                                                        backgroundColor:
-                                                            Colors.red.shade500,
-                                                        // backgroundImage: AssetImage("assets/user.png"),
-                                                        child: Center(
-                                                          child: Icon(
-                                                            Ionicons
-                                                                .videocam_outline,
-                                                            color: Colors.white,
-                                                            size: 30,
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          // nav( VideoCall(),
+                                                          //     context);
+                                                        },
+                                                        child: CircleAvatar(
+                                                          radius: 30,
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .red.shade500,
+                                                          // backgroundImage: AssetImage("assets/user.png"),
+                                                          child: const Center(
+                                                            child: Icon(
+                                                              Ionicons
+                                                                  .videocam_outline,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 30,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
@@ -1035,8 +995,29 @@ class _HomePageState extends State<HomePage> {
                                               borderRadius:
                                                   BorderRadius.circular(16),
                                             ),
-                                            child: Image.asset(
-                                              e['image'].toString(),
+                                            child: Image.network(
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                                if (loadingProgress == null)
+                                                  return child;
+                                                return Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                  color: Colors.white,
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                      : null,
+                                                ));
+                                              },
+                                              e.image.toString(),
                                               fit: BoxFit.cover,
                                             ),
                                           )

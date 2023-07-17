@@ -18,9 +18,7 @@ import '../../widget/profile/textfield_widget.dart';
 class EditProfilePage extends StatefulWidget {
   final model.User authUser;
 
-  const EditProfilePage({Key? key, 
-   required this.authUser
-  }) : super(key: key);
+  const EditProfilePage({Key? key, required this.authUser}) : super(key: key);
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -34,7 +32,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     _nameController.text = widget.authUser.name ?? '';
-    _emailController.text = widget.authUser.email.isEmpty?'NguepinsiFrank@gmail.com':'';
+    _emailController.text =
+        widget.authUser.phone.isEmpty ? '651734079@gmail.com' : '';
     super.initState();
   }
 
@@ -51,11 +50,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             return 'This field is required';
           }
         },
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12)
-        ),
-      ));
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        ));
 
     final emailField = TextFormField(
         controller: _emailController,
@@ -69,11 +66,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
         textCapitalization: TextCapitalization.none,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12)
-        ),
-      ));
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        ));
 
     final SaveButon = Material(
       elevation: 5.0,
@@ -85,17 +80,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
             final model.User user = model.User(
-                id: authStateProvider.authUser!.id.isEmpty?'kksjjdjjdjd':authStateProvider.authUser!.id,
-                email: _emailController.text,
+                createdAt: authStateProvider.authUser!.createdAt,
+                role: authStateProvider.authUser!.role,
+                id: authStateProvider.authUser!.id.isEmpty
+                    ? 'kksjjdjjdjd'
+                    : authStateProvider.authUser!.id,
+                phone: _emailController.text,
                 name: _nameController.text,
-                password: authStateProvider.authUser?.password??'hjhjhjhjhh');
+                password: authStateProvider.authUser?.password ?? 'hjhjhjhjhh');
             await authStateProvider.updateUser(user);
             if (!mounted) return;
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (BuildContext context) => const ProfilePage()));
-
           }
         },
         child: Text(
@@ -121,20 +119,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 physics: BouncingScrollPhysics(),
                 children: [
                   ProfileFormWidget(
-                    imagePath: authStateProvider.authUser!.imagePath ?? 'assets/images/d7.jpeg',
+                    imagePath: authStateProvider.authUser!.imagePath ??
+                        'assets/images/d7.jpeg',
                     isEdit: true,
                     onClicked: () async {
-                      final image = await ImagePicker()
-                          // ignore: deprecated_member_use
-                          .getImage(source: ImageSource.gallery);
+                      // final image = await ImagePicker()
+                      //     // ignore: deprecated_member_use
+                      //     .getImage(source: ImageSource.gallery);
 
-                      if (image == null) return;
-                      final directory =
-                          await getApplicationDocumentsDirectory();
-                      final name = basename(image.path);
-                      final imageFile = File('${directory.path}/$name');
-                      final newImage =
-                          await File(image.path).copy(imageFile.path);
+                      // if (image == null) return;
+                      // final directory =
+                      //     await getApplicationDocumentsDirectory();
+                      // final name = basename(image.path);
+                      // final imageFile = File('${directory.path}/$name');
+                      // final newImage =
+                      //     await File(image.path).copy(imageFile.path);
 
                       /* setState(() => authStateProvider.authUser =
                           authStateProvider.authUser!.copy(imagePath: newImage.path));*/
