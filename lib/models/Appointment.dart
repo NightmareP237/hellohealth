@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 class Appointment {
   String uid;
   String docId;
+  String docImage;
+  String doctorPhone;
   final String patientname;
   final String age;
   late final String time;
@@ -14,11 +16,11 @@ class Appointment {
   final String? location;
   final String? symptom;
   final String specialistof;
-  final String doctorPhone;
   final String whatsappDoctorPone;
 
 
   Appointment({
+    this.docImage='',
     this.uid = '',
     this.docId='',
     required this.patientname,
@@ -44,6 +46,7 @@ class Appointment {
         patientname: doc['patientname'],
         location: doc['location'],
         age: doc['age'],
+        docImage: doc['docImage'],
         time: doc['time'],
         whatsappDoctorPone: doc['whatsappDoctorPone'],
         createAt: doc['createAt'],
@@ -64,10 +67,12 @@ class Appointment {
         'patientname': patientname,
         "location":location,
         'age': age,
-        'date': time,
+        'time': time,
+        "docImage":docImage,
+        "doctorPhone":doctorPhone,
         "whatsappDoctorPone":whatsappDoctorPone,
-        'createdAt': createAt,
-        'updatedAt': updateAt,
+        'createAt': createAt,
+        'updateAt': updateAt,
         'symptom': symptom,
         "DoctorUid": DoctorUid,
         "doctorName": doctorName,
@@ -77,13 +82,14 @@ class Appointment {
   static Appointment fromJson(Map<String, dynamic> json) => Appointment(
     doctorPhone: json['doctorPhone'],
         uid: json['uid'],
+        docImage:json['docImage'],
         patientname: json['patientname'],
         age: json['age'],
         time: json['time'],
-        createAt: json['createdAt'],
+        createAt: json['createAt'],
         location: json['location'],
         whatsappDoctorPone:json['whatsappDoctorPone'],
-        updateAt: json['updatedAt'],
+        updateAt: json['updateAt'],
         symptom: json['symptom'],
         DoctorUid: json['DoctorUid'],
         doctorName: json['doctorName'],

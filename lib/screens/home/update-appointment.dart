@@ -19,7 +19,7 @@ class UpdateAppointment extends StatefulWidget {
 var selectedday = 0;
 var selectedhour = 0;
 bool child = false, adult = false, old = false, loading = false;
-String day = '', name = '', symptom = '', time = '';
+String day = '', name = '', symptom = '';
 
 class _UpdateAppointmentState extends State<UpdateAppointment> {
   @override
@@ -197,7 +197,7 @@ class _UpdateAppointmentState extends State<UpdateAppointment> {
                 onTap: () {
                   setState(() {
                     selectedhour = index;
-                    time = listofhour[index];
+                    // time = ;
                   });
                   print(index);
                 },
@@ -300,15 +300,15 @@ class _UpdateAppointmentState extends State<UpdateAppointment> {
     );
   }
 
-  Future<bool> UpdateAppoint(Appointment app) async {
+  Future<bool> UpdateAppoint(Appointment app, String docId) async {
     try {
       setState(() {
         loading = true;
       });
       await FirebaseFirestore.instance
           .collection('appointments')
-          .doc(app.docId)
-          .set(app.toJson());
+          .doc(docId)
+          .update(app.toJson());
       return true;
     } catch (e) {
       print(e);
@@ -375,17 +375,19 @@ class _UpdateAppointmentState extends State<UpdateAppointment> {
                     height: redimh(context) / 2.5,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                            width: 1,
-                            color: primaryMain,
-                            style: BorderStyle.solid),
-                        image: DecorationImage(
-                            filterQuality: FilterQuality.high,
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              'assets/images/d11.png',
-                            ))),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                          width: 1,
+                          color: primaryMain,
+                          style: BorderStyle.solid),
+                      image: DecorationImage(
+                        filterQuality: FilterQuality.high,
+                        fit: BoxFit.cover,
+                        image: NetworkImage(
+                          widget.rdv.docImage,
+                        ),
+                      ),
+                    ),
                     child: Stack(
                       children: [
                         Align(
@@ -399,27 +401,47 @@ class _UpdateAppointmentState extends State<UpdateAppointment> {
                             ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(.7),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Center(
-                                child: Icon(
-                                  Ionicons.arrow_back,
-                                  color: Colors.black,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(.7),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.arrow_back_ios_new_rounded,
+                                  color: primaryMain,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Container(
+                                height: 40,
+                                width:widget.rdv.specialistof.length>=11?redimw(context)/3 :redimw(context)/3.2,
+                                decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(.7),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Center(
+                                  child: Text(widget.rdv.specialistof,style:bodyBoldStyle(primaryMain))
+                                ),
+                              ),
+                            ),
+                          ],
+                          
+                        ),
+                        
                       ],
                     ),
                   ),
@@ -450,6 +472,9 @@ class _UpdateAppointmentState extends State<UpdateAppointment> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      var date =
+                          "${datetime.day.toInt() + selectedday}/${datetime.month}/${datetime.year}";
+
                       if ((child == false && adult == false && old == false) ||
                           (child == true && adult == true) ||
                           (child == true && old == true) ||
@@ -460,16 +485,22 @@ class _UpdateAppointmentState extends State<UpdateAppointment> {
                             title: "Attention",
                             body:
                                 'Choisissez une seule tranche d\'age et validez !');
-                      } else if (day.toString().isEmpty &&
-                          symptom.isNotEmpty &&
-                          name.isNotEmpty &&
-                          time.isNotEmpty) {
+                      } else if (listofday[selectedday].toString().isNotEmpty &&
+                          // symptom.isNotEmpty &&
+                          // name.isNotEmpty &&
+                          listofhour[selectedhour].isNotEmpty) {
                         var date = "${day}/${datetime.month}/${datetime.year}";
                         Appointment app = Appointment(
-                          doctorPhone: widget.rdv.doctorPhone,
-                          whatsappDoctorPone:widget.rdv.whatsappDoctorPone,
-                            symptom: symptom,
-                            patientname: name,
+                          docImage:widget.rdv.docImage ,
+                        
+                            doctorPhone: widget.rdv.doctorPhone,
+                            whatsappDoctorPone: widget.rdv.whatsappDoctorPone,
+                            symptom: symptom.isNotEmpty
+                                ? symptom
+                                : widget.rdv.symptom,
+                            patientname: name.isNotEmpty
+                                ? name
+                                : widget.rdv.doctorName,
                             age: child
                                 ? AGE[0]
                                 : adult
@@ -479,20 +510,18 @@ class _UpdateAppointmentState extends State<UpdateAppointment> {
                                         : '',
                             DoctorUid: widget.rdv.DoctorUid,
                             doctorName: widget.rdv.doctorName,
-                            time: time,
+                            time: listofhour[selectedhour],
                             location: widget.rdv.location,
                             specialistof: widget.rdv.specialistof,
-                            createAt: date,
-                            updateAt: datetime.toString());
-                        UpdateAppoint(app).then((value) {
+                            createAt: widget.rdv.createAt,
+                            updateAt: date);
+                        // print();
+                        // print(app.docId);
+                        UpdateAppoint(app, widget.rdv.docId).then((value) {
                           setState(() {
                             load = !value;
                           });
-                          nav(
-                              BottomBar(
-                                indexNavPage: 2,
-                              ),
-                              context);
+                          nav(BottomBar(), context);
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: Colors.green[400],
                               content: const Text(

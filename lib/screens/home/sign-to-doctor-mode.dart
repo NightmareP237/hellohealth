@@ -17,6 +17,7 @@ class _SignDoctorState extends State<SignDoctor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: white,
       body: SafeArea(
           child: Stack(
         children: [

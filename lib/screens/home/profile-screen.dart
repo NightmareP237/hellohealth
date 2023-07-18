@@ -176,6 +176,7 @@ import 'package:hellohealth/screens/home/loading-page.dart';
 import 'package:hellohealth/screens/home/personal.dart';
 import 'package:hellohealth/screens/home/sign-to-doctor-mode.dart';
 import 'package:hellohealth/screens/home/statut.dart';
+import 'package:hellohealth/screens/home/update-to-premium.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -197,15 +198,24 @@ class _MoreScreenState extends State<MoreScreen> {
     super.initState();
   }
 
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  getUrl() async {
+    final SharedPreferences prefs = await _prefs;
+    downloadUrl = prefs.getString('URL');
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     // finishMasterRoute = false;
+    getUrl();
   }
 
   @override
   Widget build(BuildContext context) {
+    (downloadUrl == null || downloadUrl != downloadUrl) ? getUrl() : null;
     ColorApp().init(context);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -395,7 +405,7 @@ class _MoreScreenState extends State<MoreScreen> {
                       ),
                       InkWell(
                         onTap: () {
-                          // nav(Trip_Planer(), context);
+                          nav(UpdatePro(), context);
                         },
                         child: Container(
                           height: 88.0,
@@ -411,7 +421,7 @@ class _MoreScreenState extends State<MoreScreen> {
                                 ),
                               ),
                               Text(
-                                "Update to Pro version",
+                                "Update to Premium",
                                 // style: bodyLightStyle(ColorApp.primaryText),
                               ),
                             ],
@@ -463,9 +473,9 @@ class _MoreScreenState extends State<MoreScreen> {
                                 setState(() {
                                   loader = true;
                                 });
-                                DeleteAccount().then((value) => setState(() {
+                                logOut().then((value) => setState(() {
                                       loader = !value;
-                                      nav(MyApp(), context,close: true);
+                                      nav(Statut(), context, close: true);
                                     }));
                               });
                         },

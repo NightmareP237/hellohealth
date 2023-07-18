@@ -8,6 +8,7 @@ import 'package:hellohealth/screens/home/loading-page.dart';
 import 'package:hellohealth/screens/home/primary-button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localization/localization.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/user.dart';
 import '../../ressources/const.dart';
@@ -34,13 +35,17 @@ bool isStartLoading = false;
 final ImagePicker _picker = ImagePicker();
 
 class _PersonnalSreenState extends State<PersonnalSreen> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   Future<bool> uploadImage(XFile image, BuildContext context) async {
+    final SharedPreferences prefs = await _prefs;
     var storage = FirebaseStorage.instance;
     if (image != null) {
       //Upload to Firebase
       var snapshot =
           await storage.ref('Profiles/' + image.name).putFile(File(image.path));
       downloadUrl = await snapshot.ref.getDownloadURL();
+      // prefs.getInt('counter');
+      prefs.setString('URL', downloadUrl);
       // APIResponse response = await APIService.updateProfileUrl(
       //     uid: currentUserId!,
       //     profileUrl: downloadUrl,
@@ -74,22 +79,22 @@ class _PersonnalSreenState extends State<PersonnalSreen> {
           showAlertDialog(
               isError: false,
               context: context,
-              title: 'dialog_success'.i18n(),
-              body: 'profile_upload_text'.i18n());
+              title: 'Success'.i18n(),
+              body: 'profile upload !'.i18n());
         } else {
           showAlertDialog(
               isError: false,
               context: context,
-              title: 'dialog_error'.i18n(),
-              body: 'error_occured_message'.i18n());
+              title: 'Error'.i18n(),
+              body: 'Image not selected .Please try again'.i18n());
         }
       } else {
         Navigator.pop(context);
         showAlertDialog(
+            isError: false,
             context: context,
-            title: 'dialog_error'.i18n(),
-            body: 'error_occured_message'.i18n(),
-            isError: false);
+            title: 'Error'.i18n(),
+            body: 'Image not selected .Please try again'.i18n());
         // CrashLog('error_occured_message'.i18n() +
         //     currentUserId!);
       }
@@ -251,8 +256,7 @@ class _PersonnalSreenState extends State<PersonnalSreen> {
                                             width: 232,
                                             padding: EdgeInsets.only(top: 8),
                                             child: ButtonCard(
-                                                label:
-                                                    'upload image'.i18n(),
+                                                label: 'upload image'.i18n(),
                                                 isOutline: false,
                                                 onTap: () async {
                                                   await showDialog(
@@ -268,7 +272,8 @@ class _PersonnalSreenState extends State<PersonnalSreen> {
                                                                       .circular(
                                                                           16.0))),
                                                           contentPadding:
-                                                              EdgeInsets.all(0),
+                                                              EdgeInsets.all(
+                                                                  10),
                                                           content:
                                                               SingleChildScrollView(
                                                             child: Column(
@@ -277,7 +282,7 @@ class _PersonnalSreenState extends State<PersonnalSreen> {
                                                                   padding: EdgeInsets
                                                                       .only(
                                                                           top:
-                                                                              24,
+                                                                              14,
                                                                           left:
                                                                               24,
                                                                           right:
@@ -285,14 +290,14 @@ class _PersonnalSreenState extends State<PersonnalSreen> {
                                                                           bottom:
                                                                               8),
                                                                   child: Text(
-                                                                    'choose_source_text'
+                                                                    'Choose Source'
                                                                         .i18n(),
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,
                                                                     style: subtitleStyle(
-                                                                        ColorApp
-                                                                            .secondaryText),
+                                                                        Colors
+                                                                            .black),
                                                                   ),
                                                                 ),
                                                                 GestureDetector(
@@ -345,7 +350,7 @@ class _PersonnalSreenState extends State<PersonnalSreen> {
                                                                                 child: SvgPicture.asset(
                                                                                   "assets/icons/camera.svg",
                                                                                   width: 16.0,
-                                                                                  color: ColorApp.defaultBackgroundColor,
+                                                                                  color: ColorApp.fieldColor,
                                                                                 ),
                                                                               ),
                                                                             ),
@@ -356,12 +361,12 @@ class _PersonnalSreenState extends State<PersonnalSreen> {
                                                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                                 children: [
                                                                                   Text(
-                                                                                    'camera_text'.i18n(),
-                                                                                    style: bodyStyle(ColorApp.primaryText),
+                                                                                    'Camera'.i18n(),
+                                                                                    style: bodyStyle(Colors.black),
                                                                                   ),
                                                                                   Text(
                                                                                     "Photo",
-                                                                                    style: footnoteStyle(ColorApp.primaryText),
+                                                                                    style: footnoteStyle(Colors.black45),
                                                                                   ),
                                                                                 ],
                                                                               ),
@@ -434,12 +439,12 @@ class _PersonnalSreenState extends State<PersonnalSreen> {
                                                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                                 children: [
                                                                                   Text(
-                                                                                    'gallery_text'.i18n(),
-                                                                                    style: bodyStyle(ColorApp.primaryText),
+                                                                                    'Gallery'.i18n(),
+                                                                                    style: bodyStyle(Colors.black),
                                                                                   ),
                                                                                   Text(
                                                                                     "Image",
-                                                                                    style: footnoteStyle(ColorApp.primaryText),
+                                                                                    style: footnoteStyle(Colors.black45),
                                                                                   ),
                                                                                 ],
                                                                               ),
@@ -485,8 +490,7 @@ class _PersonnalSreenState extends State<PersonnalSreen> {
                                       height: 16,
                                     ),
                                     Text("Enter your name".i18n(),
-                                        style:
-                                            bodyStyle(Colors.black)),
+                                        style: bodyStyle(Colors.black)),
                                     SizedBox(
                                       height: 8,
                                     ),
@@ -515,7 +519,7 @@ class _PersonnalSreenState extends State<PersonnalSreen> {
                                                 color: primaryMain,
                                                 width: 1,
                                               )),
-                                              enabledBorder: OutlineInputBorder(),
+                                          enabledBorder: OutlineInputBorder(),
                                           errorBorder: OutlineInputBorder(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(4)),

@@ -274,11 +274,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+// import 'dart:math/math.dart' ;
 import 'package:hellohealth/models/doctor.dart';
 import 'package:hellohealth/screens/home/search-doctor.dart';
 import 'package:hellohealth/screens/home/video-call.dart';
 import 'package:hellohealth/screens/home/voice-call-doctor.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -301,6 +303,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     getDoctor();
+    getUrl();
+  }
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  getUrl() async {
+    final SharedPreferences prefs = await _prefs;
+    downloadUrl = prefs.getString('URL');
   }
 
   List<Doctor> mapdata = [];
@@ -312,7 +321,7 @@ class _HomePageState extends State<HomePage> {
       await FirebaseFirestore.instance
           .collection('doctors')
           .limit(10)
-          .get(GetOptions(source: Source.server))
+          .get(GetOptions())
           .then((value) async {
         mapdata = Doctor.fromQuerySnapshot(value);
         print(mapdata.length);
@@ -552,16 +561,32 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(
                             width: 16,
                           ),
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.grey.shade400,
-                            // backgroundImage: AssetImage("assets/user.png"),
-                            child: const Center(
-                              child: Icon(
-                                Ionicons.person,
-                                color: Colors.black87,
-                              ),
-                            ),
+                          Wrap(
+                            children: [
+                              downloadUrl != null
+                                  ? Container(
+                                      height: 60,
+                                      width: 60,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                downloadUrl!,
+                                              ),
+                                              fit: BoxFit.cover),
+                                          shape: BoxShape.circle),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 30,
+                                      backgroundColor: Colors.grey.shade400,
+                                      // backgroundImage: AssetImage("assets/user.png"),
+                                      child: const Center(
+                                        child: Icon(
+                                          Ionicons.person,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                    ),
+                            ],
                           ),
                           const SizedBox(width: 10),
                           Column(
@@ -962,8 +987,8 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                       GestureDetector(
                                                         onTap: () {
-                                                          // nav( VideoCall(),
-                                                          //     context);
+                                                          nav( VideoCall(),
+                                                              context);
                                                         },
                                                         child: CircleAvatar(
                                                           radius: 30,

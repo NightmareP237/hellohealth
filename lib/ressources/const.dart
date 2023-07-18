@@ -360,9 +360,12 @@ Future<void> showAlertDialog(
                   child: Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: subtitleStyle((isError != null && isError)
-                        ? errorMain
-                        : ColorApp.secondaryText),
+                    style: subtitleStyle(
+                        // (isError != null && isError)
+                        // ?
+                        errorMain
+                        // : ColorApp.secondaryText
+                        ),
                   ),
                 ),
                 SizedBox(
@@ -396,7 +399,7 @@ Future<void> showAlertDialog(
                         method;
                       },
                       child: Text(
-                        "done_text",
+                        "OK",
                         style: buttonStyle(primaryMain),
                       )),
                 ),
@@ -431,7 +434,7 @@ Future<void> showAlertDialog2(
                   child: Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: subtitleStyle(ColorApp.secondaryText),
+                    style: subtitleStyle(errorMain),
                   ),
                 ),
                 const SizedBox(
@@ -444,7 +447,7 @@ Future<void> showAlertDialog2(
                       child: Text(body,
                           // maxLines: 2,
                           textAlign: TextAlign.center,
-                          style: bodyStyle(ColorApp.secondaryText)),
+                          style: bodyStyle(Colors.black54)),
                     ),
                   ),
                 const SizedBox(
@@ -465,8 +468,8 @@ Future<void> showAlertDialog2(
                           },
                           child: Center(
                             child: Text(
-                              "no_text",
-                              style: buttonStyle(ColorApp.disabledText),
+                              "No",
+                              style: buttonStyle(primaryMain),
                             ),
                           )),
                       Container(height: 50, width: 1, color: Color(0xFFE1E1E1)),
@@ -474,7 +477,7 @@ Future<void> showAlertDialog2(
                           onPressed: methodYes,
                           child: Center(
                             child: Text(
-                              "yes_text",
+                              "Yes",
                               style: buttonStyle(primaryMain),
                             ),
                           )),
@@ -1065,18 +1068,54 @@ Widget separatedContainer(
   );
 }
 
+Future<bool> getAnonymUserInfos() async {
+  // emailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+  DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .get();
+  if (documentSnapshot.exists) {
+    // currentUser = AnonymUser.fromDocumentSnapshot(documentSnapshot);
+    // displayName = currentUser!.displayName;
+    // role = currentUser!.role;
+    // city = currentUser!.city;
+    // if (kDebugMode) {
+    //   print('city: $city DisplayName: $displayName');
+    }
+    return true;
+  }
+
+
 Widget messageCreation = Container(
   width: double.infinity,
   height: 80,
   margin: const EdgeInsets.only(top: 16),
   decoration:
-      BoxDecoration(color: primaryMain, borderRadius: BorderRadius.circular(8)),
+      BoxDecoration(color: primaryMain.withOpacity(.5), borderRadius: BorderRadius.circular(8)),
   child: Padding(
     padding: const EdgeInsets.all(16),
     child: Center(
       child: Text(
         'you are a healthcare worker so register on HelloHealh and get patients online !',
-        style: bodyStyle(ColorApp.defaultBackgroundColor),
+        style: bodyStyle(Colors.black),
+        textAlign: TextAlign.center,
+      ),
+    ),
+  ),
+);
+
+Widget messageUpdate = Container(
+  width: double.infinity,
+  height: 90,
+  margin: const EdgeInsets.only(top: 16),
+  decoration:
+      BoxDecoration(color: primaryMain.withOpacity(.5), borderRadius: BorderRadius.circular(8)),
+  child: Padding(
+    padding: const EdgeInsets.all(12),
+    child: Center(
+      child: Text(
+        'Upgrade to the latest premium version and receive new features such as chat, home appointments and many more...',
+        style: bodyStyle(Colors.black),
         textAlign: TextAlign.center,
       ),
     ),

@@ -221,7 +221,7 @@ class _DoctorViewState extends State<DoctorView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        nav(Appoint(), context);
+                        nav(Appoint(doc: widget.doctorDetail,), context);
                       },
                       child: Container(
                         width: double.infinity,

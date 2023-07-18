@@ -9,6 +9,7 @@ class User {
   String? updatedAt;
   String? createdAt;
   bool? isDarkMode;
+  String? iscall;
 
   User({
     required this.id,

@@ -1,60 +1,133 @@
-// // import 'package:agora_uikit/agora_uikit.dart';
-// import 'package:flutter/material.dart';
+import 'dart:async';
 
-// import '../../ressources/const.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-// class VideoCall extends StatefulWidget {
-//   const VideoCall({super.key});
+import '../../ressources/const.dart';
 
-//   @override
-//   State<VideoCall> createState() => _VideoCallState();
-// }
-// String channelName = "test";
-//   String token = "7336c13814a14b5383762ea8bf65e61d";
-// class _VideoCallState extends State<VideoCall> {
-//   final AgoraClient client = AgoraClient(
-//     agoraConnectionData: AgoraConnectionData(
-//       tempToken: token,
-//       appId: appId,
-//       channelName: channelName,
-//       username: "Frank Armel",
-//     ),
-//   );
+// const appId = "<-- Insert App Id -->";
+ String channel = "test";
+  String token = "402cfb79e08547c0a7e4f310e2157ff5";
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     initAgora();
-//   }
 
-//   void initAgora() async {
-//     await client.initialize();
-//   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         appBar: AppBar(
-//           title: const Text('Agora VideoUIKit'),
-//           centerTitle: true,
-//         ),
-//         body: SafeArea(
-//           child: Stack(
-//             children: [
-//               AgoraVideoViewer(
-//                 client: client,
-//                 layoutType: Layout.floating,
-//                 enableHostControls: true, // Add this to enable host controls
-//               ),
-//               AgoraVideoButtons(
-//                 client: client,
-//                 autoHideButtons: false, // Add this to enable screen sharing
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+class VideoCall extends StatefulWidget {
+  const VideoCall({Key? key}) : super(key: key);
+
+  @override
+  State<VideoCall> createState() => _VideoCallState();
+}
+
+class _VideoCallState extends State<VideoCall> {
+  int? _remoteUid;
+  bool _localUserJoined = false;
+  late RtcEngine _engine;
+
+  @override
+  void initState() {
+    super.initState();
+    initAgora();
+  }
+// final Agor
+  Future<void> initAgora() async {
+    // retrieve permissions
+    await [Permission.microphone, Permission.camera].request();
+
+    //create the engine
+    _engine = createAgoraRtcEngine();
+    await _engine.initialize(const RtcEngineContext(
+      appId: appId,
+      channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+    ));
+
+    _engine.registerEventHandler(
+      RtcEngineEventHandler(
+        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+          debugPrint("local user ${connection.localUid} joined");
+          setState(() {
+            _localUserJoined = true;
+          });
+        },
+        onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
+          debugPrint("remote user $remoteUid joined");
+          setState(() {
+            _remoteUid = remoteUid;
+          });
+        },
+        onUserOffline: (RtcConnection connection, int remoteUid, UserOfflineReasonType reason) {
+          debugPrint("remote user $remoteUid left channel");
+          setState(() {
+            _remoteUid = null;
+          });
+        },
+        onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
+          debugPrint('[onTokenPrivilegeWillExpire] connection: ${connection.toJson()}, token: $token');
+        },
+      ),
+    );
+
+    await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+    await _engine.enableVideo();
+    await _engine.startPreview();
+
+    await _engine.joinChannel(
+      token: token,
+      channelId: channel,
+      uid: 0,
+      options: const ChannelMediaOptions(),
+    );
+  }
+
+  // Create UI with local view and remote view
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Agora Video Call'),
+      ),
+      body: Stack(
+        children: [
+          Center(
+            child: _remoteVideo(),
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: SizedBox(
+              width: 100,
+              height: 150,
+              child: Center(
+                child: _localUserJoined
+                    ? AgoraVideoView(
+                        controller: VideoViewController(
+                          rtcEngine: _engine,
+                          canvas: const VideoCanvas(uid: 1),
+                        ),
+                      )
+                    : const CircularProgressIndicator(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Display remote user's video
+  Widget _remoteVideo() {
+    if (_remoteUid != null) {
+      return AgoraVideoView(
+        controller: VideoViewController.remote(
+          rtcEngine: _engine,
+          canvas: VideoCanvas(uid: _remoteUid),
+          connection: const RtcConnection(channelId: "test"),
+        ),
+      );
+    } else {
+      return const Text(
+        'Please wait for remote user to join',
+        textAlign: TextAlign.center,
+      );
+    }
+  }
+}
