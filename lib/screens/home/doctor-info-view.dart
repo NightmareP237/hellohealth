@@ -6,7 +6,9 @@ import 'package:hellohealth/models/doctor.dart';
 import 'package:hellohealth/ressources/const.dart';
 import 'package:hellohealth/screens/home/SplashScreen/Sp1.dart';
 import 'package:hellohealth/screens/home/home_page.dart';
+import 'package:hellohealth/screens/home/video-call.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'Appointment.dart';
 
@@ -26,7 +28,15 @@ class _DoctorViewState extends State<DoctorView> {
         3,
         (index) => GestureDetector(
               onTap: () {
-                print('hello');
+                print(index);
+                if (index == 1) {
+                  _makingPhoneCall(widget.doctorDetail.phoneNumber!);
+                } else if (index == 2) {
+                  nav(VideoCall(), context);
+                } else {
+                  _makingWhatsapp(
+                      "https://api.whatsapp.com/send?phone=%2B237694536872&text&app_absent=0");
+                }
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -221,7 +231,11 @@ class _DoctorViewState extends State<DoctorView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        nav(Appoint(doc: widget.doctorDetail,), context);
+                        nav(
+                            Appoint(
+                              doc: widget.doctorDetail,
+                            ),
+                            context);
                       },
                       child: Container(
                         width: double.infinity,
@@ -245,5 +259,23 @@ class _DoctorViewState extends State<DoctorView> {
         ),
       )),
     );
+  }
+
+  _makingPhoneCall(String phoneNumber) async {
+    var url = Uri.parse("tel:$phoneNumber");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _makingWhatsapp(String Link) async {
+    var url = Uri.parse(Link);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

@@ -5,7 +5,7 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hellohealth/screens/doctors/HomeScreen.dart';
+import 'package:hellohealth/screens/home/multi-doctor-screen.dart';
 import 'package:hellohealth/screens/home/home_page.dart';
 import 'package:ionicons/ionicons.dart';
 
