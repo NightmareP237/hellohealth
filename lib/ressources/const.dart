@@ -15,10 +15,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:localization/localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:flutter/foundation.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../models/Appointment.dart';
+import '../models/doctor.dart';
 
 Color primaryMain = Colors.orange;
 Color background = Colors.white;
@@ -36,7 +36,7 @@ nav(Widget navigate, BuildContext context, {bool close = false}) {
 
 List AGE = ['Child', 'Adult', 'Old'];
 const String appId = "fe0402efdded41f59f5209511cb1e0d9";
-
+List<Doctor> mapdata = [];
 List listofhour = ['10: 10', '10: 30', '10: 50', '14: 10', '14: 50'];
 List listofmonth = [
   'January',
@@ -103,7 +103,7 @@ String tenantDomainApp = 'numcloud.cm';
 
 var theme;
 FirebaseAuth authInstance = FirebaseAuth.instance;
-
+var role, Darkmode, phoneNumber;
 Future<bool> logOut() async {
   try {
     await authInstance.signOut();
@@ -571,6 +571,7 @@ Future showAlertDialogWithSubtitle(
         );
       });
 }
+
 
 Future<void> showDeleteUser(
     {required BuildContext context,
@@ -1068,30 +1069,33 @@ Widget separatedContainer(
   );
 }
 
-Future<bool> getAnonymUserInfos() async {
+model.User? UserHealth;
+
+Future<bool> getUserInfo() async {
   // emailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
   DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .get();
   if (documentSnapshot.exists) {
-    // currentUser = AnonymUser.fromDocumentSnapshot(documentSnapshot);
-    // displayName = currentUser!.displayName;
-    // role = currentUser!.role;
-    // city = currentUser!.city;
-    // if (kDebugMode) {
-    //   print('city: $city DisplayName: $displayName');
+    UserHealth = model.User.fromDocumentSnapshot(documentSnapshot);
+    role = UserHealth!.role;
+    Darkmode = UserHealth!.isDarkMode;
+    phoneNumber = UserHealth!.phone;
+    if (kDebugMode) {
+      print('Darkmode: $Darkmode role: $role');
     }
-    return true;
   }
-
+  return true;
+}
 
 Widget messageCreation = Container(
   width: double.infinity,
   height: 80,
   margin: const EdgeInsets.only(top: 16),
-  decoration:
-      BoxDecoration(color: primaryMain.withOpacity(.5), borderRadius: BorderRadius.circular(8)),
+  decoration: BoxDecoration(
+      color: primaryMain.withOpacity(.5),
+      borderRadius: BorderRadius.circular(8)),
   child: Padding(
     padding: const EdgeInsets.all(16),
     child: Center(
@@ -1108,8 +1112,9 @@ Widget messageUpdate = Container(
   width: double.infinity,
   height: 90,
   margin: const EdgeInsets.only(top: 16),
-  decoration:
-      BoxDecoration(color: primaryMain.withOpacity(.5), borderRadius: BorderRadius.circular(8)),
+  decoration: BoxDecoration(
+      color: primaryMain.withOpacity(.5),
+      borderRadius: BorderRadius.circular(8)),
   child: Padding(
     padding: const EdgeInsets.all(12),
     child: Center(

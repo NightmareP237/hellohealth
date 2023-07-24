@@ -366,42 +366,29 @@ class _PlanningState extends State<Planning> {
                                                                     GestureDetector(
                                                                       onTap:
                                                                           () {
-                                                                        showDialog(
-                                                                          context:
-                                                                              context,
-                                                                          builder: (context) =>
-                                                                              AlertDialog(
-                                                                            alignment:
-                                                                                Alignment.center,
+                                                                        showDeleteUser(
+                                                                            context:
+                                                                                context,
                                                                             title:
-                                                                                Text(
-                                                                              'Alert !',
-                                                                              style: SubTitle(),
-                                                                            ),
-                                                                            content:
-                                                                                Text('are you sure you want to delete this appointment ?'),
-                                                                            actions: [
-                                                                              TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
-                                                                              TextButton(
-                                                                                  onPressed: () {
-                                                                                    Navigator.pop(context);
-                                                                                    setState(() {
-                                                                                      load = false;
-                                                                                    });
-                                                                                    Timer(Duration(milliseconds: 700), () {
-                                                                                      deleteAppointments(index).then((value) {
-                                                                                        setState(() {
-                                                                                          load = value;
-                                                                                          myappointment.remove(index);
-                                                                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.green[400], content: const Text('You have successfully deleted this appointment !')));
-                                                                                        });
-                                                                                      });
-                                                                                    });
-                                                                                  },
-                                                                                  child: Text('Ok')),
-                                                                            ],
-                                                                          ),
-                                                                        );
+                                                                                "Attention",
+                                                                            body:
+                                                                                "do you want to cancel this medical appointment ?",
+                                                                            methodYes:
+                                                                                () {
+                                                                              Navigator.pop(context);
+                                                                              setState(() {
+                                                                                load = false;
+                                                                              });
+                                                                              Timer(Duration(milliseconds: 700), () {
+                                                                                deleteAppointments(index).then((value) {
+                                                                                  setState(() {
+                                                                                    load = value;
+                                                                                    myappointment.remove(index);
+                                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.green[400], content: const Text('You have successfully deleted this appointment !')));
+                                                                                  });
+                                                                                });
+                                                                              });
+                                                                            });
                                                                       },
                                                                       child:
                                                                           Container(

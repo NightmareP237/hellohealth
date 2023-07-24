@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:models/user.dart' as model;
 import 'package:hellohealth/models/user.dart' as model;
+import 'package:hellohealth/ressources/const.dart';
 
 class Response {
   int? code;
@@ -31,7 +32,7 @@ class AuthProvider with ChangeNotifier {
     print("enter new user-----------------.$phone $name $password");
     // Get back usercredential future from createUserWithEmailAndPassword method
     UserCredential userCred = await authInstance.createUserWithEmailAndPassword(
-      email:"$phone@gmail.com",
+      email: "$phone@gmail.com",
       password: password,
     );
     // Save username name
@@ -39,20 +40,31 @@ class AuthProvider with ChangeNotifier {
     await userCred.user!.sendEmailVerification();
 
     await login(phone, password);
-    await createUser(_authUser!);
+    await createUser(_authUser!).then((value) {
+      if (value) {
+        getUserInfo();
+      }
+    });
     // notify listeneres
     notifyListeners();
   }
 
-  Future createUser(model.User user) async {
-    final docUser = FirebaseFirestore.instance.collection('users').doc();
-    authUser?.id = docUser.id;
-    final json = authUser?.toJson();
-    print('-----------------------------------------------------------');
-    print(json);
-    print('-----------------------------------------------------------');
-    await docUser.set(json!);
-    notifyListeners();
+  Future<bool> createUser(model.User user) async {
+    try {
+      final docUser = FirebaseFirestore.instance.collection('users').doc();
+      authUser?.id = docUser.id;
+      final json = authUser?.toJson();
+      print('-----------------------------------------------------------');
+      print(json);
+      print('-----------------------------------------------------------');
+      await docUser.set(json!);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      print(e);
+      notifyListeners();
+      return false;
+    }
   }
 
   Future<void> updateUser(model.User user) async {

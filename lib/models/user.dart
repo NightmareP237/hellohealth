@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class User {
   String id;
   String? imagePath;
@@ -60,6 +62,27 @@ class User {
         updatedAt: json['updatedAt'] != null ? (json['updatedAt']) : '',
         isDarkMode: json['isDarkMode'] ?? false,
       );
+  static User fromDocumentSnapshot(DocumentSnapshot doc) {
+    // final firebaseStorage = FirebaseStorage.instance;
+    // List<Doctor> doctors = [];
+    // for (final doc in querySnapshot.docs) {
+    final user = User(
+      role: doc['role'],
+      id: doc['id'],
+      imagePath: doc['imagePath'] ?? '',
+      name: doc['name'],
+      phone: doc['phone'],
+      password: doc['password'],
+      about: doc['about'] ?? '',
+      createdAt: doc['createdAt'] != null ? (doc['createdAt']) : '',
+      updatedAt: doc['updatedAt'] != null ? (doc['updatedAt']) : '',
+      isDarkMode: doc['isDarkMode'] ?? false,
+    );
+    // doctors.add(doctor);
+    // }
+    // end for
+    return user;
+  }
 
   Map<String, dynamic> toJson() => {
         'id': id,

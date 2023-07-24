@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hellohealth/models/Appointment.dart';
 import 'package:hellohealth/screens/home/bottom-bar.dart';
@@ -419,7 +420,7 @@ class _UpdateAppointmentState extends State<UpdateAppointment> {
                                   child: Center(
                                     child: Icon(
                                       Icons.arrow_back_ios_new_rounded,
-                                  color: primaryMain,
+                                      color: primaryMain,
                                     ),
                                   ),
                                 ),
@@ -429,19 +430,19 @@ class _UpdateAppointmentState extends State<UpdateAppointment> {
                               padding: const EdgeInsets.all(16.0),
                               child: Container(
                                 height: 40,
-                                width:widget.rdv.specialistof.length>=11?redimw(context)/3 :redimw(context)/3.2,
+                                width: widget.rdv.specialistof.length >= 11
+                                    ? redimw(context) / 3
+                                    : redimw(context) / 3.2,
                                 decoration: BoxDecoration(
                                     color: Colors.white.withOpacity(.7),
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Center(
-                                  child: Text(widget.rdv.specialistof,style:bodyBoldStyle(primaryMain))
-                                ),
+                                    child: Text(widget.rdv.specialistof,
+                                        style: bodyBoldStyle(primaryMain))),
                               ),
                             ),
                           ],
-                          
                         ),
-                        
                       ],
                     ),
                   ),
@@ -491,16 +492,15 @@ class _UpdateAppointmentState extends State<UpdateAppointment> {
                           listofhour[selectedhour].isNotEmpty) {
                         var date = "${day}/${datetime.month}/${datetime.year}";
                         Appointment app = Appointment(
-                          docImage:widget.rdv.docImage ,
-                        
+                            docImage: widget.rdv.docImage,
+                            uid: FirebaseAuth.instance.currentUser!.uid,
                             doctorPhone: widget.rdv.doctorPhone,
                             whatsappDoctorPone: widget.rdv.whatsappDoctorPone,
                             symptom: symptom.isNotEmpty
                                 ? symptom
                                 : widget.rdv.symptom,
-                            patientname: name.isNotEmpty
-                                ? name
-                                : widget.rdv.doctorName,
+                            patientname:
+                                name.isNotEmpty ? name : widget.rdv.doctorName,
                             age: child
                                 ? AGE[0]
                                 : adult

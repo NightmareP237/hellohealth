@@ -283,6 +283,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../ressources/const.dart';
 import 'package:ionicons/ionicons.dart';
@@ -305,6 +306,7 @@ class _HomePageState extends State<HomePage> {
     getDoctor();
     getUrl();
   }
+
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   getUrl() async {
@@ -312,7 +314,6 @@ class _HomePageState extends State<HomePage> {
     downloadUrl = prefs.getString('URL');
   }
 
-  List<Doctor> mapdata = [];
   Future<bool> getDoctor() async {
     try {
       setState(() {
@@ -903,42 +904,49 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                   ),
                                                   const SizedBox(height: 10),
-                                                  Container(
-                                                    width: 200,
-                                                    height: 40,
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        vertical: 8,
-                                                        horizontal: 16),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      color: Colors.green
-                                                          .withOpacity(.7),
-                                                    ),
-                                                    child: Center(
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        children: [
-                                                          const Icon(
-                                                            Ionicons
-                                                                .logo_whatsapp,
-                                                            color: Colors.white,
-                                                          ),
-                                                          Text(
-                                                            "messages",
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 16),
-                                                          ),
-                                                        ],
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      _makingWhatsapp(
+                                                          "https://api.whatsapp.com/send?phone=%2B237694536872&text&app_absent=0");
+                                                    },
+                                                    child: Container(
+                                                      width: 200,
+                                                      height: 40,
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 8,
+                                                          horizontal: 16),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        color: Colors.green
+                                                            .withOpacity(.7),
+                                                      ),
+                                                      child: Center(
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            const Icon(
+                                                              Ionicons
+                                                                  .logo_whatsapp,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                            Text(
+                                                              "messages",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 16),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -962,8 +970,8 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                       GestureDetector(
                                                         onTap: () {
-                                                          nav(const VoiceCall(),
-                                                              context);
+                                                          _makingPhoneCall(
+                                                              e.phoneNumber!);
                                                         },
                                                         child: CircleAvatar(
                                                           radius: 30,
@@ -987,7 +995,7 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                       GestureDetector(
                                                         onTap: () {
-                                                          nav( VideoCall(),
+                                                          nav(VideoCall(),
                                                               context);
                                                         },
                                                         child: CircleAvatar(
@@ -1141,6 +1149,24 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           );
+  }
+
+  _makingPhoneCall(String phoneNumber) async {
+    var url = Uri.parse("tel:$phoneNumber");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _makingWhatsapp(String Link) async {
+    var url = Uri.parse(Link);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
 
