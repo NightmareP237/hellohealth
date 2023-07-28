@@ -29,6 +29,8 @@ _makingPhoneCall() async {
   }
 }
 
+bool obscurt = true;
+
 class _LoginFormWidgetState extends State<LoginFormWidget> {
   final _formkey = GlobalKey<FormState>();
   bool _isLoading = false;
@@ -53,7 +55,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) =>  BottomBar()));
+                  builder: (BuildContext context) => BottomBar()));
         }
       } on FirebaseAuthException catch (e) {
         // On error
@@ -173,10 +175,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                           cursorColor: Colors.orange,
                           key: ValueKey('phone'),
                           validator: (value) {
-                            if (value!.isEmpty||(value.length<10)
+                            if (value!.isEmpty || (value.length < 10)
                                 // (!value.contains('@') &&
                                 //     !value.contains('.'))
-                                    ) {
+                                ) {
                               return 'Enter a valid phone number !';
                             }
                             return null;
@@ -186,10 +188,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                           textCapitalization: TextCapitalization.none,
                           decoration: InputDecoration(
                             fillColor: Colors.orange,
-                            prefixIcon: Icon(Ionicons.phone_landscape),
+                            prefixIcon: Icon(Icons.phone),
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(style: BorderStyle.solid)
-                            ),
+                                borderSide:
+                                    BorderSide(style: BorderStyle.solid)),
                             labelText: 'Enter your phone number',
                             contentPadding:
                                 EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
@@ -209,8 +211,16 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                               ? 'Password must be least 7 characters long!'
                               : null,
                           autofocus: false,
-                          obscureText: true,
+                          obscureText: obscurt,
                           decoration: InputDecoration(
+                            suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    obscurt = !obscurt;
+                                  });
+                                },
+                                child: Icon(
+                                    obscurt ? Ionicons.eye : Ionicons.eye_off)),
                             iconColor: Colors.orange,
                             prefixIcon: Icon(Ionicons.lock_closed),
                             border: OutlineInputBorder(
@@ -339,7 +349,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 12,),
+                        SizedBox(
+                          height: 12,
+                        ),
                         GestureDetector(
                           onTap: () {
                             _makingPhoneCall();

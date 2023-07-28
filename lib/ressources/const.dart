@@ -572,7 +572,6 @@ Future showAlertDialogWithSubtitle(
       });
 }
 
-
 Future<void> showDeleteUser(
     {required BuildContext context,
     required String title,
@@ -1073,20 +1072,25 @@ model.User? UserHealth;
 
 Future<bool> getUserInfo() async {
   // emailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-  DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
-      .get();
-  if (documentSnapshot.exists) {
-    UserHealth = model.User.fromDocumentSnapshot(documentSnapshot);
-    role = UserHealth!.role;
-    Darkmode = UserHealth!.isDarkMode;
-    phoneNumber = UserHealth!.phone;
-    if (kDebugMode) {
-      print('Darkmode: $Darkmode role: $role');
+  try {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    if (documentSnapshot.exists) {
+      UserHealth = model.User.fromDocumentSnapshot(documentSnapshot);
+      role = UserHealth!.role;
+      Darkmode = UserHealth!.isDarkMode;
+      phoneNumber = UserHealth!.phone;
+      if (kDebugMode) {
+        print('Darkmode: $Darkmode role: $role');
+      }
     }
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
   }
-  return true;
 }
 
 Widget messageCreation = Container(

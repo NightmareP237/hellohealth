@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hellohealth/screens/home/bottom-bar.dart';
 import 'package:hellohealth/screens/home/loading-page.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/auth_provider.dart';
@@ -45,7 +46,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
   var _userName = '';
   var _userPhone = '';
   var _userPassword = '';
-
+  bool obscurt = true;
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _cfp = TextEditingController();
 
@@ -61,7 +62,19 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
         setState(() {
           _isLoading = true;
         });
-        final AuthProvider authStateProvider =
+         if (_cfp.text.trim() != _userPassword.trim()) {
+           setState(() {
+          _isLoading = false;
+        });
+          print(" password.do not match");
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text("password.do not match"),
+              backgroundColor: Theme.of(context).errorColor,
+            ),
+          );
+        }else{
+           final AuthProvider authStateProvider =
             Provider.of<AuthProvider>(context, listen: false);
         await authStateProvider.register(
           _userPhone.trim(),
@@ -70,11 +83,16 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
         );
         if (!mounted) return;
         if (authStateProvider.isAuthenticated == true) {
+           setState(() {
+          _isLoading = false;
+        });
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => BottomBar()));
         }
+        }
+       
       } on FirebaseAuthException catch (e) {
         // On error
         // If user exists
@@ -88,15 +106,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
           );
         }
         // If password is wrong
-        if (_cfp != _pass) {
-          print(" password.do not match");
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text("password.do not match"),
-              backgroundColor: Theme.of(context).errorColor,
-            ),
-          );
-        }
+       
 
         setState(() {
           _isLoading = false;
@@ -256,7 +266,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
                             border: OutlineInputBorder(
                                 borderSide:
                                     BorderSide(style: BorderStyle.solid)),
-                            prefixIcon: Icon(Icons.email),
+                            prefixIcon: Icon(Icons.phone),
                             // icon: ,
                             labelText: 'Enter your phone number ',
                             contentPadding:
@@ -276,8 +286,15 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
                               ? 'Password must be least 7 characters long!'
                               : null,
                           autofocus: false,
-                          obscureText: true,
+                          obscureText: obscurt,
                           decoration: InputDecoration(
+                            suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    obscurt = !obscurt;
+                                  });
+                                },
+                                child: Icon(obscurt?Ionicons.eye:Ionicons.eye_off)),
                             border: OutlineInputBorder(
                                 borderSide:
                                     BorderSide(style: BorderStyle.solid)),
